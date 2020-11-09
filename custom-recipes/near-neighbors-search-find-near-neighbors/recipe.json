@@ -21,7 +21,7 @@
             "required": true,
             "mustBeStrictlyType": "Filesystem",
             "acceptsManagedFolder": true,
-            "acceptsDataset" : false
+            "acceptsDataset": false
         }
     ],
     "outputRoles": [
@@ -43,7 +43,7 @@
         {
             "name": "unique_id",
             "type": "COLUMN",
-            "columnRole":"input_dataset",
+            "columnRole": "input_dataset",
             "label": "Unique ID",
             "description": "Column that uniquely identifies each row",
             "mandatory": true
@@ -51,22 +51,25 @@
         {
             "name": "embedding_column",
             "type": "COLUMN",
-            "columnRole":"input_dataset",
+            "columnRole": "input_dataset",
             "description": "Columns with a vector representation (e.g. embeddings) of each row",
             "label": "Vector columns",
-            "allowedColumnTypes": ["vector", "string"],
+            "allowedColumnTypes": [
+                "vector",
+                "string"
+            ],
             "mandatory": true
         },
         {
             "name": "separator_nns",
-            "label":"Nearest neighbor parameters",
+            "label": "Nearest neighbor parameters",
             "type": "SEPARATOR"
         },
         {
             "name": "number_of_neighbors",
             "type": "INT",
-            "defaultValue" : 5,
-            "minI":1,
+            "defaultValue": 5,
+            "minI": 1,
             "maxI": 1000,
             "label": "Number of neighbors",
             "mandatory": true

@@ -1,6 +1,6 @@
-# Near Neighbors Search Plugin
+# Similarity Search Plugin
 
-This Dataiku DSS plugin provides two recipes to build and use Near Neighbor Search (NNS) indices. 
+This Dataiku DSS plugin provides two recipes to find similar items in your data using Nearest Neighbor Search.
 
 This plugin is not compatible with partitioning.
 
@@ -8,4 +8,4 @@ Documentation: https://www.dataiku.com/dss/plugins/info/near-neighbor-search.htm
 
 ## License
 
-This plugin is distributed under the Apache License version 2.0
+This plugin is distributed under the Apache License version 2.0.

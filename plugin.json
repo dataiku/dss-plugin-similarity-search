@@ -10,6 +10,9 @@
         "licenseInfo": "Apache Software License",
         "supportLevel": "NOT_SUPPORTED",
         "url": "https://www.dataiku.com/dss/plugins/info/near-neighbor-search.html",
-        "tags": ["Machine Learning", "Recommendation"]
+        "tags": [
+            "Machine Learning",
+            "Recommendation"
+        ]
     }
 }

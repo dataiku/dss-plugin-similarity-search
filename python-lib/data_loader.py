@@ -2,7 +2,6 @@ from nns_utils import reshape_values
 
 
 class DataLoader(object):
-
     def __init__(self, dataset_name, unique_column, embedding_column):
         self._dataset_name = dataset_name
         self._unique_column = unique_column
