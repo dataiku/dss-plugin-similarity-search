@@ -1,17 +1,15 @@
 {
-    "id": "your-plugin-id",
+    "id": "nearest-neighbors-search",
     "version": "0.1.0",
     "meta": {
-        "label": "Your plugin label",
-        "category": "Your category (optional)",
-        "description": "Your description (keep it short and simple)",
-        "author": "Organization (firstName LASTNAME)",
-        "icon": "icon-font-awesome-3.2.1",
+        "label": "Similarity Search",
+        "description": "Find similar items in your data using Nearest Neighbor Search",
+        "category": "Recommendation systems",
+        "author": "Dataiku (Liev GARCIA)",
+        "icon": "icon-barcode",
         "licenseInfo": "Apache Software License",
-        "url": "https://www.dataiku.com/product/plugins/your-plugin-id/",
-        "tags": [
-            "myTag"
-        ],
-        "supportLevel": "NOT_SUPPORTED"
+        "supportLevel": "NOT_SUPPORTED",
+        "url": "https://www.dataiku.com/dss/plugins/info/near-neighbor-search.html",
+        "tags": ["Machine Learning", "Recommendation"]
     }
 }
