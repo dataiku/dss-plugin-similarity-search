@@ -2,7 +2,8 @@
     "meta": {
         "label": "Nearest Neighbor Search",
         "description": "Find the nearest neighbors of each row of a dataset using a pre-computed index",
-        "icon": "icon-spinner"
+        "icon": "icon-spinner",
+        "displayOrderRank": 2
     },
     "kind": "PYTHON",
     "inputRoles": [
@@ -41,7 +42,7 @@
             "type": "SEPARATOR"
         },
         {
-            "name": "unique_id",
+            "name": "unique_id_column",
             "type": "COLUMN",
             "columnRole": "input_dataset",
             "label": "Unique ID",
@@ -49,8 +50,8 @@
             "mandatory": true
         },
         {
-            "name": "embedding_column",
-            "type": "COLUMN",
+            "name": "embedding_columns",
+            "type": "COLUMNS",
             "columnRole": "input_dataset",
             "description": "Columns with a vector representation (e.g. embeddings) of each row",
             "label": "Vector columns",

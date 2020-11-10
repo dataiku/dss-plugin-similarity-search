@@ -5,14 +5,14 @@
         "label": "Similarity Search",
         "description": "Find similar items in your data using Nearest Neighbor Search",
         "category": "Recommendation systems",
-        "author": "Dataiku (Liev GARCIA)",
+        "author": "Dataiku (Liev GARCIA, Thibault DESFONTAINES, Alex COMBESSIE)",
         "icon": "icon-barcode",
         "licenseInfo": "Apache Software License",
         "supportLevel": "NOT_SUPPORTED",
-        "url": "https://www.dataiku.com/dss/plugins/info/near-neighbor-search.html",
+        "url": "https://www.dataiku.com/dss/plugins/info/similarity-search.html",
         "tags": [
             "Machine Learning",
-            "Recommendation"
+            "Recommendation System"
         ]
     }
 }

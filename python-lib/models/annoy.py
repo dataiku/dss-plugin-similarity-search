@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
 import annoy
-from models.base import BaseNNS
+from models.base import NearestNeighborSearchModel
 
 import json
 import numpy as np
 import os
 
 
-class Annoy(BaseNNS):
+class AnnoyModel(NearestNeighborSearchModel):
     def __init__(self, *args, **kwargs):
         self._metric = kwargs.get("annoy_metric")
         self._search_k = None

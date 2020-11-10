@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import dataiku
 from dataiku.customrecipe import get_input_names, get_output_names, get_recipe_config
 from models.base import BaseNNS

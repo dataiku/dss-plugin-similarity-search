@@ -1,14 +1,5 @@
-import numpy as np
+# -*- coding: utf-8 -*-
 import pandas as pd
-
-
-def reshape_values(pd_series):
-    """
-    Gets the data ready as it needs to be in numpy array for for all models.
-    """
-    pd_series = pd_series.dropna()
-    vectors = np.array([eval(e) for e in pd_series.values.tolist()]).astype(np.float32)
-    return vectors
 
 
 def reshape_nns(nns, query_names, index_names):

@@ -1,23 +1,23 @@
+# -*- coding: utf-8 -*-
+
 import faiss
-from models.base import BaseNNS
+from models.base import NearestNeighborSearchModel
 import os
 import json
 
 
-class Faiss(BaseNNS):
+class FaissModel(NearestNeighborSearchModel):
     def __init__(self, *args, **kwargs):
         self._index = kwargs.get("faiss_index")
         self._dims = kwargs.get("dims")
         self._lsh_n_bits = int(kwargs.get("faiss_lsh_n_bits", 4))
 
-    def fit_and_save(self, names, vectors, folder):
+    def fit_and_save(self, names, vectors, folder_path):
         """
         Create requested index from params.
         Add vectors and store index.
         Generate configuration file and save alongside the index.
         """
-        folder_path = folder.get_path()
-
         if self._index == "IndexFlatL2":
             index = faiss.IndexFlatL2(self._dims)
         elif self._index == "IndexFlatIP":
@@ -49,14 +49,14 @@ class Faiss(BaseNNS):
             }
         )
 
-    def _load(self, index_file_path):
+    def load(self, index_file_path):
         self.index = faiss.read_index(index_file_path)
         return self
 
-    def _find_near_neighbors(self, vectors, number_of_neighbors=5):
+    def find_near_neighbors(self, vectors, number_of_neighbors=5):
         """
         Bulk lookup the vectors.
-        Return only indices (I) list, ignore the distances (D) for now.
+        Return only indices list, ignore the distances for now.
         """
         distances, indices = self.index.search(vectors, number_of_neighbors)
         return indices

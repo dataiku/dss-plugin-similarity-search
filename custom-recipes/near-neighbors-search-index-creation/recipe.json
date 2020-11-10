@@ -2,7 +2,8 @@
     "meta": {
         "label": "Nearest Neighbor Indexing",
         "description": "Build and store indices required to search for nearest neighbors",
-        "icon": "icon-barcode"
+        "icon": "icon-barcode",
+        "displayOrderRank": 1
     },
     "kind": "PYTHON",
     "inputRoles": [
