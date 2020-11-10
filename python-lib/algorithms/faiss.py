@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import faiss
-from models.base import NearestNeighborSearchModel
+from algori.base import NearestNeighborSearchModel
 import os
 import json
 

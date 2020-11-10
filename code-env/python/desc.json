@@ -4,5 +4,5 @@
     ],
     "forceConda": false,
     "installCorePackages": true,
-    "installJupyterSupport": false
+    "installJupyterSupport": true
 }

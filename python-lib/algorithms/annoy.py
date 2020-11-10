@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 
-class AnnoyModel(NearestNeighborSearchModel):
+class AnnoyAlgo(NearestNeighborSearchModel):
     def __init__(self, *args, **kwargs):
         self._metric = kwargs.get("annoy_metric")
         self._search_k = None

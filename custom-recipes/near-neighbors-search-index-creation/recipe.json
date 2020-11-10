@@ -61,6 +61,7 @@
         {
             "name": "model",
             "type": "SELECT",
+            "label": "Algorithm",
             "selectChoices": [
                 {
                     "label": "Annoy (Spotify)",
