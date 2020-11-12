@@ -4,7 +4,7 @@
     "meta": {
         "label": "Similarity Search",
         "description": "Find similar items in your data using Nearest Neighbor Search",
-        "category": "Recommendation systems",
+        "category": "Recommender System",
         "author": "Dataiku (Liev GARCIA, Thibault DESFONTAINES, Alex COMBESSIE)",
         "icon": "icon-barcode",
         "licenseInfo": "Apache Software License",
@@ -12,7 +12,7 @@
         "url": "https://www.dataiku.com/dss/plugins/info/similarity-search.html",
         "tags": [
             "Machine Learning",
-            "Recommendation System"
+            "Recommender System"
         ]
     }
 }
