@@ -6,6 +6,8 @@
         "displayOrderRank": 2
     },
     "kind": "PYTHON",
+    "selectableFromDataset": "input_dataset",
+    "selectableFromFolder": "index_folder",
     "inputRoles": [
         {
             "name": "input_dataset",
