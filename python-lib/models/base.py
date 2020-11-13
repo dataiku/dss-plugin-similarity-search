@@ -10,13 +10,13 @@ class NearestNeighborSearchAlgorithm:
         """Determine based on the arguments the appropriate algorithm"""
         algorithm = kwargs.get("algorithm")
         if algorithm == "annoy":
-            from algorithms.annoy import Annoy  # noqa
+            from models.annoy import AnnoyAlgorithm  # noqa
 
             for i in cls.__subclasses__():
                 if i.__name__ == "Annoy":
                     return super().__new__(i)
         elif algorithm == "faiss":
-            from algorithms.faiss import Faiss  # noqa
+            from models.faiss import FaissAlgorithm  # noqa
 
             for i in cls.__subclasses__():
                 if i.__name__ == "Faiss":

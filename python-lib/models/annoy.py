@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import AnyStr, Dict:
+from typing import AnyStr
 
 import annoy
 from models.base import NearestNeighborSearchAlgorithm
@@ -28,18 +28,15 @@ class AnnoyAlgorithm(NearestNeighborSearchAlgorithm):
         Normalise vectors and add vectors to index (no bulk method so one by one).
         Generate configuration file and save alongside the index.
         """
-        folder_path = folder.get_path()
 
         index = annoy.AnnoyIndex(self.num_dimensions, metric=self.metric)
         index.on_disk_build(os.path.join(folder_path, "index.nns"))
 
-        names_dict = {}
         for i, vector in enumerate(vectors):
             index.add_item(i, vector.tolist())
-            names_dict[i] = names[i]
         index.build(self._n_trees)
 
-        config = self._create_config(names_dict)
+        config = self._create_config()
         with open(os.path.join(folder_path, "config.json"), "w") as fp:
             json.dump(config, fp)
 
@@ -53,7 +50,6 @@ class AnnoyAlgorithm(NearestNeighborSearchAlgorithm):
             "annoy_metric": self.metric,
             "num_dimensions": self.num_dimensions,
             "n_trees": self.n_trees,
-            "vector_ids": names_dict,
         }
         return config
 
@@ -67,4 +63,3 @@ class AnnoyAlgorithm(NearestNeighborSearchAlgorithm):
         for vector in vectors:
             nns.append(self.index.get_nns_by_vector(vector, number_of_neighbors))
         return np.array(nns)
-

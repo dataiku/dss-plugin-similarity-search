@@ -165,7 +165,6 @@
             "type": "INT",
             "defaultValue": 4,
             "minI": 4,
-            "description": "",
             "label": "Number of LSH bits",
             "visibilityCondition": "model.algorithm == 'faiss' && model.faiss_index=='IndexLSH' && model.expert"
         }
