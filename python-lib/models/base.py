@@ -10,6 +10,7 @@ class NearestNeighborSearchAlgorithm:
 
     INDEX_FILE_NAME = "index.nns"
     CONFIG_FILE_NAME = "config.json"
+    VECTORS_FILE_NAME = "vectors.npz"
 
     def __new__(cls, *args, **kwargs):
         """Determine based on the arguments the appropriate algorithm"""
@@ -32,7 +33,7 @@ class NearestNeighborSearchAlgorithm:
     def __str__(self) -> AnyStr:
         return self.name
 
-    def build_save_index(self, vector_ids: np.array, vectors: np.array, folder_path: AnyStr) -> Dict:
+    def build_save_index(self, vector_ids: np.array, vectors: np.array, file_path: AnyStr) -> Dict:
         """Algorithm-specific method to specify for each implementation"""
         raise NotImplementedError("Index building and saving method not implemented")
 

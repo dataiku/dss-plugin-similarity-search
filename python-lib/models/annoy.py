@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import os
 from typing import AnyStr, Dict
 
 import annoy
@@ -20,19 +19,18 @@ class AnnoyAlgorithm(NearestNeighborSearchAlgorithm):
             "model": self.__str__(),
             "metric": self.metric,
             "num_trees": self.num_trees,
-        }
+        }  # may be modified by `self.build_save_index`
 
     def __str__(self):
         return "annoy"
 
     @time_logging(log_message="Building index on file")
-    def build_save_index(self, vector_ids: np.array, vectors: np.array, folder_path: AnyStr) -> Dict:
+    def build_save_index(self, vectors: np.array, file_path: AnyStr) -> Dict:
         """Initialize index on disk, add each item one-by-one and save to disk"""
         index_config = self.config
         index_config["num_dimensions"] = vectors.shape[1]
-        index_config["vector_ids"] = vector_ids.tolist()
         index = annoy.AnnoyIndex(index_config["num_dimensions"], metric=self.metric)
-        index.on_disk_build(os.path.join(folder_path, NearestNeighborSearchAlgorithm.INDEX_FILE_NAME))
+        index.on_disk_build(file_path)
         for i, vector in enumerate(vectors):
             index.add_item(i, vector.tolist())
         index.build(n_trees=self.num_trees)
