@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from typing import AnyStr
+
 
 class NearestNeighborSearchAlgorithm:
-    def __new__(cls, *args, **kwargs):
+    """Base class for all Nearest Neighbor Search algorithms"""
+
+    def __new__(cls, **kwargs):
         """Determine based on the arguments the appropriate algorithm"""
         algorithm = kwargs.get("algorithm")
         if algorithm == "annoy":
@@ -20,8 +24,8 @@ class NearestNeighborSearchAlgorithm:
         else:
             raise NotImplementedError(f"Algorithm '{algorithm}' is not available")
 
-    def __str__(self):
+    def __str__(self) -> AnyStr:
         return self.name
 
-    def load(self, index_file_path):
-        pass
+    def load_index(self, index_file_path: AnyStr) -> None:
+        raise NotImplementedError("Index loading method not implemented")

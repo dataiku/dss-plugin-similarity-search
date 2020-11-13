@@ -44,37 +44,43 @@
             "type": "SEPARATOR"
         },
         {
-            "name": "unique_id_column",
+            "name": "primary_key_column",
             "type": "COLUMN",
             "columnRole": "input_dataset",
-            "label": "Unique ID",
+            "label": "Primary key column",
             "description": "Column that uniquely identifies each row",
             "mandatory": true
         },
         {
-            "name": "embedding_columns",
+            "name": "feature_columns",
             "type": "COLUMNS",
             "columnRole": "input_dataset",
-            "description": "Columns with a vector representation (e.g. embeddings) of each row",
-            "label": "Vector columns",
+            "description": "Columns containing numeric or vector data (e.g. embeddings)",
+            "label": "Feature column(s)",
             "allowedColumnTypes": [
+                "tinyint",
+                "smallint",
+                "int",
+                "bigint",
+                "float",
+                "double",
                 "vector",
                 "string"
             ],
             "mandatory": true
         },
         {
-            "name": "separator_nns",
-            "label": "Nearest neighbor parameters",
+            "name": "separator_lookup",
+            "label": "Lookup parameters",
             "type": "SEPARATOR"
         },
         {
-            "name": "number_of_neighbors",
+            "name": "num_neighbors",
+            "label": "Number of neighbors",
             "type": "INT",
             "defaultValue": 5,
             "minI": 1,
             "maxI": 1000,
-            "label": "Number of neighbors",
             "mandatory": true
         }
     ],

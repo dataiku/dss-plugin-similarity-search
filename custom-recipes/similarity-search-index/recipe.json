@@ -1,7 +1,7 @@
 {
     "meta": {
         "label": "Nearest Neighbor Indexing",
-        "description": "Create indices required to search for nearest neighbors",
+        "description": "Build indices required to search for nearest neighbors",
         "icon": "icon-barcode",
         "displayOrderRank": 1
     },
@@ -132,7 +132,7 @@
             "visibilityCondition": "model.algorithm == 'annoy' && model.expert"
         },
         {
-            "name": "annoy_n_trees",
+            "name": "annoy_num_trees",
             "type": "INT",
             "defaultValue": 10,
             "minI": 1,
@@ -161,7 +161,7 @@
             "visibilityCondition": "model.algorithm == 'faiss' && model.expert"
         },
         {
-            "name": "faiss_lsh_n_bits",
+            "name": "faiss_lsh_num_bits",
             "type": "INT",
             "defaultValue": 4,
             "minI": 4,

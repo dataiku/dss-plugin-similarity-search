@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
-import faiss
-from algori.base import NearestNeighborSearchModel
 import os
 import json
 
+import faiss
 
-class FaissModel(NearestNeighborSearchModel):
+from models.base import NearestNeighborSearchAlgorithm
+
+
+class FaissAlgorithm(NearestNeighborSearchAlgorithm):
+    """Wrapper class for the FAISS Nearest Neighbor Search algorithm"""
+
     def __init__(self, *args, **kwargs):
         self._index = kwargs.get("faiss_index")
         self._dims = kwargs.get("dims")
-        self._lsh_n_bits = int(kwargs.get("faiss_lsh_n_bits", 4))
+        self._lsh_n_bits = int(kwargs.get("faiss_lsh_num_bits", 4))
 
     def fit_and_save(self, names, vectors, folder_path):
         """
