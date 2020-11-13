@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from typing import AnyStr
-
-import annoy
-from models.base import NearestNeighborSearchAlgorithm
-
-import json
 import numpy as np
 import os
+from typing import AnyStr, Dict
+
+import annoy
+
+from models.base import NearestNeighborSearchAlgorithm
+from plugin_utils import time_logging
 
 
 class AnnoyAlgorithm(NearestNeighborSearchAlgorithm):
@@ -15,51 +15,36 @@ class AnnoyAlgorithm(NearestNeighborSearchAlgorithm):
 
     def __init__(self, **kwargs):
         self.metric = kwargs.get("annoy_metric")
-        self.n_trees = int(kwargs.get("annoy_n_trees", 10))
-        self.num_dimensions = int(kwargs.get("num_dimensions", 0))
-        self.index = None  # will be loaded by `load_index`
+        self.num_trees = int(kwargs.get("annoy_num_trees", 10))
+        self.config = {
+            "model": self.__str__(),
+            "metric": self.metric,
+            "num_trees": self.num_trees,
+        }
 
     def __str__(self):
         return "annoy"
 
-    def build_index(self, vector_ids: np.array, vectors: np.array, folder_path: AnyStr):
-        """
-        Create requested index from params.
-        Normalise vectors and add vectors to index (no bulk method so one by one).
-        Generate configuration file and save alongside the index.
-        """
-
-        index = annoy.AnnoyIndex(self.num_dimensions, metric=self.metric)
-        index.on_disk_build(os.path.join(folder_path, "index.nns"))
-
+    @time_logging(log_message="Building index on file")
+    def build_save_index(self, vector_ids: np.array, vectors: np.array, folder_path: AnyStr) -> Dict:
+        """Initialize index on disk, add each item one-by-one and save to disk"""
+        index_config = self.config
+        index_config["num_dimensions"] = vectors.shape[1]
+        index_config["vector_ids"] = vector_ids.tolist()
+        index = annoy.AnnoyIndex(index_config["num_dimensions"], metric=self.metric)
+        index.on_disk_build(os.path.join(folder_path, NearestNeighborSearchAlgorithm.INDEX_FILE_NAME))
         for i, vector in enumerate(vectors):
             index.add_item(i, vector.tolist())
-        index.build(self._n_trees)
-
-        config = self._create_config()
-        with open(os.path.join(folder_path, "config.json"), "w") as fp:
-            json.dump(config, fp)
-
-    def _get_config(self, vector_ids: np.array):
-        """
-        Generated needed config to be able to load and query the index.
-        """
-        config = {
-            "model": self.__str__(),
-            "index_file": "index.nns",
-            "annoy_metric": self.metric,
-            "num_dimensions": self.num_dimensions,
-            "n_trees": self.n_trees,
-        }
-        return config
+        index.build(n_trees=self.num_trees)
+        return index_config
 
     def load_index(self, index_file_path: AnyStr):
         self.index = annoy.AnnoyIndex(self.num_dimensions, metric=self.metric)
         self.index.load(index_file_path)
 
-    def lookup_neighbors(self, vectors, number_of_neighbors=5) -> np.array:
+    def lookup_neighbors(self, vectors: np.array, num_neighbors: int = 5) -> np.array:
         """No bulk lookup supported by the library so it has to be done in loop"""
         nns = []
         for vector in vectors:
-            nns.append(self.index.get_nns_by_vector(vector, number_of_neighbors))
+            nns.append(self.index.get_nns_by_vector(vector, num_neighbors))
         return np.array(nns)

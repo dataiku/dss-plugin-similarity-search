@@ -35,8 +35,8 @@ def load_indexing_recipe_params() -> Dict:
     output_folder_names = get_output_names_for_role("output_folder")
     if len(output_folder_names) == 0:
         raise PluginParamValidationError("Please specify output folder")
-    output_folder = dataiku.Folder(output_folder_names[0])
-    params["output_folder_path"] = output_folder.get_path()
+    params["output_folder"] = dataiku.Folder(output_folder_names[0])
+    params["output_folder_path"] = params["output_folder"].get_path()
     if not params["output_folder_path"]:
         raise PluginParamValidationError("Output folder must be on the local filesystem")
     # Recipe configuration parameters

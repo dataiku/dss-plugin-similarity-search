@@ -10,7 +10,9 @@ data_loader = DataLoader(params["primary_key_column"], params["feature_columns"]
 
 (vector_ids, vectors) = data_loader.load_df(params["input_df"])
 
-search_algorithm = NearestNeighborSearchAlgorithm()
-
-search_algorithm.build_index(vector_ids=params["vector_ids"], vector=params["vectors"])
-search_algorithm.save_index(folder_path=params["output_folder_path"])
+algorithm = NearestNeighborSearchAlgorithm(**params)
+print(algorithm)
+index_config = algorithm.build_save_index(
+    vector_ids=vector_ids, vectors=vectors, folder_path=params["output_folder_path"]
+)
+params["output_folder"].write_json(filename=algorithm.CONFIG_FILE_NAME, obj=index_config)

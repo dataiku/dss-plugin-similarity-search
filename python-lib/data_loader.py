@@ -4,7 +4,7 @@
 import json
 import logging
 from typing import List, AnyStr, Tuple
-from time import time
+from time import perf_counter
 
 import pandas as pd
 import numpy as np
@@ -38,7 +38,7 @@ class DataLoader:
 
     def load_df(self, df: pd.DataFrame) -> Tuple[np.array, np.array]:
         """Load a dataframe into the vector format required by Similarity Search algorithms"""
-        start = time()
+        start = perf_counter()
         self._validate_df(df)
         logging.info(
             f"Loading dataframe of {len(df.index)} rows and "
@@ -65,6 +65,6 @@ class DataLoader:
         vectors = vectors[:, :i]
         logging.info(
             f"Loading dataframe into vector format: array of dimensions {vectors.shape} "
-            + f"loaded in {time() - start:.2f} seconds.",
+            + f"loaded in {perf_counter() - start:.2f} seconds.",
         )
         return (vector_ids, vectors)
