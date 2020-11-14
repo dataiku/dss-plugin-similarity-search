@@ -26,4 +26,5 @@ with NamedTemporaryFile() as tmp:
 # Save vector data and indexing config to guarantee reproducibility
 save_array_to_folder(array=vector_ids, path=algorithm.VECTOR_IDS_FILE_NAME, folder=params["index_folder"])
 save_array_to_folder(array=vectors, path=algorithm.VECTORS_FILE_NAME, folder=params["index_folder"])
-params["index_folder"].write_json(algorithm.CONFIG_FILE_NAME, algorithm.get_config())
+config = {**algorithm.get_config(), **{k: v for k, v in params.items() if k in {"feature_columns", "expert"}}}
+params["index_folder"].write_json(algorithm.CONFIG_FILE_NAME, config)
