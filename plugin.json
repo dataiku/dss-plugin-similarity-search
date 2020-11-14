@@ -3,13 +3,13 @@
     "version": "0.1.0",
     "meta": {
         "label": "Similarity Search",
-        "description": "Build Nearest Neighbor indices to find similar items in your data",
+        "description": "Find similar items in your data using Nearest Neighbor Indexing and Search",
         "category": "Recommender System",
         "author": "Dataiku (Liev GARCIA, Thibault DESFONTAINES, Alex COMBESSIE)",
         "icon": "icon-barcode",
         "licenseInfo": "Apache Software License",
         "supportLevel": "NOT_SUPPORTED",
-        "url": "https://www.dataiku.com/dss/plugins/info/similarity-search.html",
+        "url": "https://www.dataiku.com/product/plugins/similarity-search/",
         "tags": [
             "Machine Learning",
             "Recommender System"
