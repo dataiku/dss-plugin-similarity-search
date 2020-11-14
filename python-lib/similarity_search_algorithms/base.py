@@ -15,27 +15,27 @@ class SimilaritySearchAlgorithm:
     CONFIG_FILE_NAME = "config.json"
     VECTOR_IDS_FILE_NAME = "vector_ids.npz"
     VECTORS_FILE_NAME = "vectors.npz"
-    QUERY_COLUMN_NAME = "query_id"
+    INPUT_COLUMN_NAME = "input_id"
     NEIGHBOR_COLUMN_NAME = "neighbor_id"
     COLUMN_DESCRIPTIONS = {
-        QUERY_COLUMN_NAME: "Input query ID",
-        NEIGHBOR_COLUMN_NAME: "Neighbor ID in the pre-computed index",
+        INPUT_COLUMN_NAME: "Unique ID from the input dataset",
+        NEIGHBOR_COLUMN_NAME: "Neighbor ID from the pre-computed index",
     }
 
     def __new__(cls, *args, **kwargs):
         """Determine the appropriate algorithm based on the arguments"""
         algorithm = kwargs.get("algorithm")
         if algorithm == "annoy":
-            from models.annoy import AnnoyAlgorithm  # noqa
+            from similarity_search_algorithms.annoy import Annoy  # noqa
 
             for i in cls.__subclasses__():
-                if i.__name__ == "AnnoyAlgorithm":
+                if i.__name__ == "Annoy":
                     return super().__new__(i)
         elif algorithm == "faiss":
-            from models.faiss import FaissAlgorithm  # noqa
+            from similarity_search_algorithms.faiss import Faiss  # noqa
 
             for i in cls.__subclasses__():
-                if i.__name__ == "FaissAlgorithm":
+                if i.__name__ == "Faiss":
                     return super().__new__(i)
         else:
             raise NotImplementedError(f"Algorithm '{algorithm}' is not available")
@@ -47,7 +47,7 @@ class SimilaritySearchAlgorithm:
         """Config required to reload the index after initial build"""
         raise NotImplementedError("Get config method not implemented")
 
-    def build_save_index(self, vector_ids: np.array, vectors: np.array, file_path: AnyStr) -> None:
+    def build_save_index(self, vector_ids: np.array, vectors: np.array, index_path: AnyStr) -> None:
         """Add vectors to the index and save to disk"""
         raise NotImplementedError("Index building and saving method not implemented")
 
@@ -56,7 +56,7 @@ class SimilaritySearchAlgorithm:
         raise NotImplementedError("Index loading method not implemented")
 
     def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List:
-        """Search for nearest neighbors of each vector and return their indices"""
+        """Find nearest neighbors of each vector and return their indices"""
         raise NotImplementedError("Find neighbors method not implemented")
 
     def find_neighbors_df(
@@ -68,9 +68,9 @@ class SimilaritySearchAlgorithm:
         num_neighbors: int = 5,
         **kwargs,
     ) -> pd.DataFrame:
-        """Algorithm-specific method to specify for each implementation"""
+        """Find nearest neighbors in a raw pandas DataFrame and format results into a new DataFrame"""
         output_df = pd.DataFrame()
-        output_df[self.QUERY_COLUMN_NAME] = df[unique_id_column]
+        output_df[self.INPUT_COLUMN_NAME] = df[unique_id_column]
         data_loader = DataLoader(unique_id_column, feature_columns)
         (vector_ids, vectors) = data_loader.convert_df_to_vectors(df, verbose=False)
         if vectors.shape[1] != self.num_dimensions:
@@ -80,5 +80,7 @@ class SimilaritySearchAlgorithm:
             )
         output_df[self.NEIGHBOR_COLUMN_NAME] = self.find_neighbors_vector(vectors, num_neighbors)
         output_df = output_df.explode(self.NEIGHBOR_COLUMN_NAME)
-
+        output_df[self.NEIGHBOR_COLUMN_NAME] = (
+            output_df[self.NEIGHBOR_COLUMN_NAME].astype(int).apply(lambda i: index_vector_ids[i])
+        )  # lookup the original vector ids
         return output_df

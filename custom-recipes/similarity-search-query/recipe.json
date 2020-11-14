@@ -56,7 +56,7 @@
             "name": "feature_columns",
             "type": "COLUMNS",
             "columnRole": "input_dataset",
-            "description": "Columns containing numeric or vector data (e.g. embeddings)",
+            "description": "Columns containing numeric or vector data (e.g. embeddings) in the same order as the index",
             "label": "Feature column(s)",
             "allowedColumnTypes": [
                 "tinyint",

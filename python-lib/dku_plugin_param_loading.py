@@ -50,9 +50,6 @@ def load_input_output_params(recipe_id: RecipeID) -> Dict:
         if len(input_folder_names) == 0:
             raise PluginParamValidationError("Please specify index folder as input")
         params["index_folder"] = dataiku.Folder(input_folder_names[0])
-    params["index_folder_path"] = params["index_folder"].get_path()
-    if not params["index_folder_path"]:
-        raise PluginParamValidationError("Index folder must be on the local filesystem")
     # Output dataset - only for search recipe
     if recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
         output_dataset_names = get_output_names_for_role("output_dataset")

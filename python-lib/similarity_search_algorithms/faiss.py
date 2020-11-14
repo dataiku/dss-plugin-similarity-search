@@ -5,11 +5,11 @@ from typing import AnyStr, Dict, List
 
 import faiss
 
-from models.base import SimilaritySearchAlgorithm
+from similarity_search_algorithms.base import SimilaritySearchAlgorithm
 from plugin_utils import time_logging
 
 
-class FaissAlgorithm(SimilaritySearchAlgorithm):
+class Faiss(SimilaritySearchAlgorithm):
     """Wrapper class for the Faiss Similarity Search algorithm"""
 
     def __init__(self, num_dimensions: int, **kwargs):
@@ -37,12 +37,12 @@ class FaissAlgorithm(SimilaritySearchAlgorithm):
         }
 
     @time_logging(log_message="Building index and saving to disk")
-    def build_save_index(self, vectors: np.array, file_path: AnyStr) -> None:
+    def build_save_index(self, vectors: np.array, index_path: AnyStr) -> None:
         if self.index.is_trained:
             self.index.add(vectors)
         else:
             raise NotImplementedError("Faiss training methods not implemented")
-        faiss.write_index(self.index, file_path)
+        faiss.write_index(self.index, index_path)
 
     @time_logging(log_message="Loading pre-computed index from disk")
     def load_index(self, file_path: AnyStr) -> None:

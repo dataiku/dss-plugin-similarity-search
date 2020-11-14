@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module with utility functions which are not based on the Dataiku API"""
+"""Module with utility functions which are *not* based on the Dataiku API"""
 
 import logging
 import functools

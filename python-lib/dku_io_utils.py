@@ -3,9 +3,10 @@
 
 import logging
 import math
-from time import time
+from time import perf_counter
 from typing import Callable, Dict, AnyStr
 from tempfile import NamedTemporaryFile
+from pathlib import Path
 
 import numpy as np
 from tqdm import tqdm
@@ -70,7 +71,7 @@ def process_dataset_chunks(
     if input_count_records == 0:
         raise ValueError("Input dataset has no records")
     logging.info(f"Processing dataset {input_dataset.name} of {input_count_records} rows by chunks of {chunksize}...")
-    start = time()
+    start = perf_counter()
     # First, initialize output schema if not present. Required to show the real error if `iter_dataframes` fails.
     if not output_dataset.read_schema(raise_if_empty=False):
         df = input_dataset.get_dataframe(limit=5, infer_with_pandas=False)
@@ -87,7 +88,8 @@ def process_dataset_chunks(
                 )
             writer.write_dataframe(output_df)
     logging.info(
-        f"Processing dataset {input_dataset.name} of {input_count_records} rows: Done in {time() - start:.2f} seconds."
+        f"Processing dataset {input_dataset.name} of {input_count_records} rows: "
+        + f"Done in {perf_counter() - start:.2f} seconds."
     )
 
 
@@ -125,7 +127,7 @@ def set_column_descriptions(
     output_dataset.write_schema(output_dataset_schema)
 
 
-def save_array(array: np.array, path: AnyStr, folder: dataiku.Folder, compress: bool = True) -> None:
+def save_array_to_folder(array: np.array, path: AnyStr, folder: dataiku.Folder, compress: bool = True) -> None:
     """Save a numpy array to a Dataiku folder"""
     with NamedTemporaryFile() as tmp:
         if compress:
@@ -136,7 +138,18 @@ def save_array(array: np.array, path: AnyStr, folder: dataiku.Folder, compress: 
         folder.upload_stream(path, tmp)
 
 
-def load_array(array: np.array, path: AnyStr, folder: dataiku.Folder) -> None:
-    """Load a numpy array from a Dataiku folder"""
-    with NamedTemporaryFile() as tmp:
-        folder.upload_stream(path, tmp)
+def download_file_from_folder_to_tmp(path: AnyStr, folder: dataiku.Folder) -> NamedTemporaryFile:
+    """Download a file from a Dataiku Folder into a local temporary file"""
+    file_extension = Path(path).suffix
+    tmp = NamedTemporaryFile(suffix=file_extension)
+    with folder.get_download_stream(path) as stream:
+        tmp.write(bytes(stream.read()))
+    _ = tmp.seek(0)  # Come together, right now
+    return tmp
+
+
+def load_array_from_folder(path: AnyStr, folder: dataiku.Folder) -> np.array:
+    """Load a numpy array from a Dataiku folder using a local temporary file"""
+    with download_file_from_folder_to_tmp(path, folder) as tmp:
+        array = np.load(tmp.name, allow_pickle=True)["arr_0"]
+    return array

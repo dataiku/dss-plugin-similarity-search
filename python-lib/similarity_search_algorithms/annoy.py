@@ -6,11 +6,11 @@ from typing import AnyStr, Dict, List
 import annoy
 from tqdm import tqdm
 
-from models.base import SimilaritySearchAlgorithm
+from similarity_search_algorithms.base import SimilaritySearchAlgorithm
 from plugin_utils import time_logging
 
 
-class AnnoyAlgorithm(SimilaritySearchAlgorithm):
+class Annoy(SimilaritySearchAlgorithm):
     """Wrapper class for the Annoy Similarity Search algorithm"""
 
     def __init__(self, num_dimensions: int, **kwargs):
@@ -31,8 +31,8 @@ class AnnoyAlgorithm(SimilaritySearchAlgorithm):
         }
 
     @time_logging(log_message="Building index and saving to disk")
-    def build_save_index(self, vectors: np.array, file_path: AnyStr) -> None:
-        self.index.on_disk_build(file_path)
+    def build_save_index(self, vectors: np.array, index_path: AnyStr) -> None:
+        self.index.on_disk_build(index_path)
         for i, vector in enumerate(tqdm(vectors, mininterval=1.0)):
             self.index.add_item(i, vector.tolist())
         self.index.build(n_trees=self.annoy_num_trees)
