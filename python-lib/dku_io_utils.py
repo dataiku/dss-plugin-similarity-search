@@ -127,7 +127,6 @@ def set_column_descriptions(
 
 def save_array(array: np.array, path: AnyStr, folder: dataiku.Folder, compress: bool = True) -> None:
     """Save a numpy array to a Dataiku folder"""
-
     with NamedTemporaryFile() as tmp:
         if compress:
             np.savez_compressed(tmp, array)

@@ -19,7 +19,7 @@
         {
             "name": "index_folder",
             "label": "Index folder",
-            "description": "Local filesystem folder containing a saved index",
+            "description": "Local filesystem folder containing a pre-computed index",
             "arity": "UNARY",
             "required": true,
             "mustBeStrictlyType": "Filesystem",

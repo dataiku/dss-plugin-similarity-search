@@ -3,9 +3,17 @@
 
 import logging
 from typing import Dict
+from enum import Enum
 
 import dataiku
 from dataiku.customrecipe import get_recipe_config, get_input_names_for_role, get_output_names_for_role
+
+
+class RecipeID(Enum):
+    """Enum class to identify each recipe"""
+
+    SIMILARITY_SEARCH_INDEX = "Nearest Neighbor Indexing"
+    SIMILARITY_SEARCH_QUERY = "Nearest Neighbor Search"
 
 
 class PluginParamValidationError(ValueError):
@@ -14,8 +22,8 @@ class PluginParamValidationError(ValueError):
     pass
 
 
-def load_input_output_params() -> Dict:
-    """Load and validate input/output parameters for both indexing and lookup recipes
+def load_input_output_params(recipe_id: RecipeID) -> Dict:
+    """Load and validate input/output parameters for both indexing and search recipes
 
     Returns:
         Dictionary of parameter names (key) and values
@@ -29,20 +37,28 @@ def load_input_output_params() -> Dict:
     input_dataset_names = get_input_names_for_role("input_dataset")
     if len(input_dataset_names) == 0:
         raise PluginParamValidationError("Please specify input folder")
-    input_dataset = dataiku.Dataset(input_dataset_names[0])
-    input_dataset_columns = [p["name"] for p in input_dataset.read_schema()]
+    params["input_dataset"] = dataiku.Dataset(input_dataset_names[0])
+    input_dataset_columns = [p["name"] for p in params["input_dataset"].read_schema()]
     # Index folder
-    output_folder_names = get_output_names_for_role("index_folder")
-    input_folder_names = get_input_names_for_role("index_folder")
-    if len(output_folder_names) == 0 and len(input_folder_names) == 0:
-        raise PluginParamValidationError("Please specify index folder")
-    elif len(output_folder_names) != 0:
+    if recipe_id == RecipeID.SIMILARITY_SEARCH_INDEX:
+        output_folder_names = get_output_names_for_role("index_folder")
+        if len(output_folder_names) == 0:
+            raise PluginParamValidationError("Please specify index folder as output")
         params["index_folder"] = dataiku.Folder(output_folder_names[0])
-    elif len(input_folder_names) != 0:
+    elif recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
+        input_folder_names = get_input_names_for_role("index_folder")
+        if len(input_folder_names) == 0:
+            raise PluginParamValidationError("Please specify index folder as input")
         params["index_folder"] = dataiku.Folder(input_folder_names[0])
     params["index_folder_path"] = params["index_folder"].get_path()
     if not params["index_folder_path"]:
         raise PluginParamValidationError("Index folder must be on the local filesystem")
+    # Output dataset - only for search recipe
+    if recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
+        output_dataset_names = get_output_names_for_role("output_dataset")
+        if len(output_dataset_names) == 0:
+            raise PluginParamValidationError("Please specify output dataset")
+        params["output_dataset"] = dataiku.Dataset(output_dataset_names[0])
     # Recipe input parameters
     recipe_config = get_recipe_config()
     params["unique_id_column"] = recipe_config.get("unique_id_column")
@@ -51,10 +67,7 @@ def load_input_output_params() -> Dict:
     params["feature_columns"] = recipe_config.get("feature_columns", [])
     if not set(params["feature_columns"]).issubset(set(input_dataset_columns)):
         raise PluginParamValidationError(f"Invalid feature column(s): {params['feature_columns']}")
-    params["input_df"] = input_dataset.get_dataframe(
-        columns=[params["unique_id_column"]] + params["feature_columns"], infer_with_pandas=False
-    )
-    printable_params = {k: v for k, v in params.items() if k not in {"input_df", "index_folder"}}
+    printable_params = {k: v for k, v in params.items() if k not in {"input_dataset", "index_folder", "output_dataset"}}
     logging.info(f"Validated input/output parameters: {printable_params}")
     return params
 
@@ -70,7 +83,7 @@ def load_indexing_recipe_params() -> Dict:
 
     """
     logging.info("Validating Nearest Neighbor Indexing parameters...")
-    input_output_params = load_input_output_params()
+    input_output_params = load_input_output_params(RecipeID.SIMILARITY_SEARCH_INDEX)
     # Recipe modeling parameters
     modeling_params = {}
     recipe_config = get_recipe_config()
@@ -100,7 +113,7 @@ def load_indexing_recipe_params() -> Dict:
     return {**input_output_params, **modeling_params}
 
 
-def load_lookup_recipe_params() -> Dict:
+def load_search_recipe_params() -> Dict:
     """Load and validate parameters of the Nearest Neighbor Search recipe
 
     Returns:
@@ -111,7 +124,7 @@ def load_lookup_recipe_params() -> Dict:
 
     """
     logging.info("Validating Nearest Neighbor Search parameters...")
-    input_output_params = load_input_output_params()
+    input_output_params = load_input_output_params(RecipeID.SIMILARITY_SEARCH_QUERY)
     # Recipe lookup parameters
     lookup_params = {}
     recipe_config = get_recipe_config()

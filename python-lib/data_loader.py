@@ -36,14 +36,15 @@ class DataLoader:
             if df[column].isnull().values.any():
                 raise ValueError(f"Empty values in column '{column}'")
 
-    def load_df(self, df: pd.DataFrame) -> Tuple[np.array, np.array]:
+    def load_df(self, df: pd.DataFrame, verbose: bool = True) -> Tuple[np.array, np.array]:
         """Load a dataframe into the vector format required by Similarity Search algorithms"""
         start = perf_counter()
         self._validate_df(df)
-        logging.info(
-            f"Loading dataframe of {len(df.index)} rows and "
-            + f"{len(self.feature_columns)} column(s) into vector format..."
-        )
+        if verbose:
+            logging.info(
+                f"Loading dataframe of {len(df.index)} rows and "
+                + f"{len(self.feature_columns)} column(s) into vector format..."
+            )
         vector_ids = df[self.unique_id_column].values
         vectors = np.empty(shape=(len(df.index), self.MAX_VECTOR_LENGTH))
         i = 0
@@ -58,13 +59,14 @@ class DataLoader:
                     raise ValueError(f"Invalid vector data in column '{column}': {e}")
             else:
                 try:
-                    vectors[:, i] = df[column].values.astype(np.float)
+                    vectors[:, i] = df[column].values.astype(np.float32)
                     i += 1
                 except ValueError as e:
                     raise ValueError(f"Invalid numeric data in column '{column}': {e}")
         vectors = np.ascontiguousarray(vectors[:, :i], dtype=np.float32)
-        logging.info(
-            f"Loading dataframe into vector format: array of dimensions {vectors.shape} "
-            + f"loaded in {perf_counter() - start:.2f} seconds.",
-        )
+        if verbose:
+            logging.info(
+                f"Loading dataframe into vector format: array of dimensions {vectors.shape} "
+                + f"loaded in {perf_counter() - start:.2f} seconds.",
+            )
         return (vector_ids, vectors)

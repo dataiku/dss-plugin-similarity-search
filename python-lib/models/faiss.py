@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from typing import AnyStr, Dict
+from typing import AnyStr, Dict, List
 
 import faiss
 
@@ -13,7 +13,7 @@ class FaissAlgorithm(SimilaritySearchAlgorithm):
     """Wrapper class for the Faiss Similarity Search algorithm"""
 
     def __init__(self, num_dimensions: int, **kwargs):
-        self.num_dimensions = num_dimensions
+        super().__init__(num_dimensions)
         self.faiss_index_type = kwargs.get("faiss_index_type")
         self.faiss_lsh_num_bits = int(kwargs.get("faiss_lsh_num_bits", 4))
         if self.faiss_index_type == "IndexFlatL2":
@@ -29,7 +29,6 @@ class FaissAlgorithm(SimilaritySearchAlgorithm):
         return "faiss"
 
     def get_config(self) -> Dict:
-        """Return the config of the algorithm - required to reload after saving to disk"""
         return {
             "algorithm": self.__str__(),
             "num_dimensions": self.num_dimensions,
@@ -39,7 +38,6 @@ class FaissAlgorithm(SimilaritySearchAlgorithm):
 
     @time_logging(log_message="Building index and saving to disk")
     def build_save_index(self, vectors: np.array, file_path: AnyStr) -> None:
-        """Initialize index on disk, add vectors and save to disk"""
         if self.index.is_trained:
             self.index.add(vectors)
         else:
@@ -48,12 +46,8 @@ class FaissAlgorithm(SimilaritySearchAlgorithm):
 
     @time_logging(log_message="Loading pre-computed index from disk")
     def load_index(self, file_path: AnyStr) -> None:
-        """Load saved index into memory"""
         self.index = faiss.read_index(file_path)
 
-    def lookup_neighbors(self, vectors: np.array, num_neighbors: int = 5) -> np.array:
-        """No bulk lookup supported by the library so it has to be done in loop"""
-        nns = []
-        for vector in vectors:
-            nns.append(self.index.get_nns_by_vector(vector, num_neighbors))
-        return np.array(nns)
+    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List:
+        (_, neighbors) = self.index.search(vectors, num_neighbors)
+        return neighbors.tolist()
