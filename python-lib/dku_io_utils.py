@@ -4,9 +4,12 @@
 import logging
 import math
 from time import time
-from typing import Callable, Dict
+from typing import Callable, Dict, AnyStr
+from tempfile import NamedTemporaryFile
 
+import numpy as np
 from tqdm import tqdm
+
 import dataiku
 
 
@@ -120,3 +123,15 @@ def set_column_descriptions(
             if len(matched_comment) != 0:
                 output_col_info["comment"] = matched_comment[0]
     output_dataset.write_schema(output_dataset_schema)
+
+
+def save_array(array: np.array, path: AnyStr, folder: dataiku.Folder, compress: bool = True) -> None:
+    """Save a numpy array to a Dataiku folder"""
+
+    with NamedTemporaryFile() as tmp:
+        if compress:
+            np.savez_compressed(tmp, array)
+        else:
+            np.savez(tmp, array)
+        _ = tmp.seek(0)  # Oh, take me back to the start
+        folder.upload_stream(path, tmp)

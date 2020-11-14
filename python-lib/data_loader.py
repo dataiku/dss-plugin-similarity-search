@@ -14,8 +14,8 @@ class DataLoader:
 
     MAX_VECTOR_LENGTH = 2 ** 16  # hardcoded limit to keep vectors size under 65536
 
-    def __init__(self, primary_key_column: AnyStr, feature_columns: List[AnyStr]):
-        self.primary_key_column = primary_key_column
+    def __init__(self, unique_id_column: AnyStr, feature_columns: List[AnyStr]):
+        self.unique_id_column = unique_id_column
         self.feature_columns = feature_columns
 
     @staticmethod
@@ -30,8 +30,8 @@ class DataLoader:
     def _validate_df(self, df: pd.DataFrame):
         if len(df.index) == 0:
             raise ValueError("Input dataset is empty")
-        if not df[self.primary_key_column].is_unique:
-            raise ValueError(f"Values in the primary key column '{self.primary_key_column}' should be unique")
+        if not df[self.unique_id_column].is_unique:
+            raise ValueError(f"Values in the unique ID column '{self.unique_id_column}' should be unique")
         for column in self.feature_columns:
             if df[column].isnull().values.any():
                 raise ValueError(f"Empty values in column '{column}'")
@@ -44,7 +44,7 @@ class DataLoader:
             f"Loading dataframe of {len(df.index)} rows and "
             + f"{len(self.feature_columns)} column(s) into vector format..."
         )
-        vector_ids = df[self.primary_key_column].values
+        vector_ids = df[self.unique_id_column].values
         vectors = np.empty(shape=(len(df.index), self.MAX_VECTOR_LENGTH))
         i = 0
         for column in sorted(self.feature_columns):
@@ -62,7 +62,7 @@ class DataLoader:
                     i += 1
                 except ValueError as e:
                     raise ValueError(f"Invalid numeric data in column '{column}': {e}")
-        vectors = vectors[:, :i]
+        vectors = np.ascontiguousarray(vectors[:, :i], dtype=np.float32)
         logging.info(
             f"Loading dataframe into vector format: array of dimensions {vectors.shape} "
             + f"loaded in {perf_counter() - start:.2f} seconds.",

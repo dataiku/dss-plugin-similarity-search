@@ -10,6 +10,7 @@ class NearestNeighborSearchAlgorithm:
 
     INDEX_FILE_NAME = "index.nns"
     CONFIG_FILE_NAME = "config.json"
+    VECTOR_IDS_FILE_NAME = "vector_ids.npz"
     VECTORS_FILE_NAME = "vectors.npz"
 
     def __new__(cls, *args, **kwargs):

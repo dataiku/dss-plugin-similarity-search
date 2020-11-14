@@ -44,10 +44,10 @@
             "type": "SEPARATOR"
         },
         {
-            "name": "primary_key_column",
+            "name": "unique_id_column",
             "type": "COLUMN",
             "columnRole": "input_dataset",
-            "label": "Primary key column",
+            "label": "Unique ID column",
             "description": "Column that uniquely identifies each row",
             "mandatory": true
         },

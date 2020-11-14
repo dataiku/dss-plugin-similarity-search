@@ -8,6 +8,8 @@ from time import perf_counter
 
 
 def time_logging(log_message: AnyStr):
+    """Decorator to log timing with a custom message"""
+
     def inner_function(function: Callable):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):

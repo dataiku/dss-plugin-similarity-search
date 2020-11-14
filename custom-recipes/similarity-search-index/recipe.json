@@ -35,10 +35,10 @@
             "type": "SEPARATOR"
         },
         {
-            "name": "primary_key_column",
+            "name": "unique_id_column",
             "type": "COLUMN",
             "columnRole": "input_dataset",
-            "label": "Primary key column",
+            "label": "Unique ID column",
             "description": "Column that uniquely identifies each row",
             "mandatory": true
         },
@@ -75,7 +75,7 @@
                     "value": "annoy"
                 },
                 {
-                    "label": "FAISS (Facebook)",
+                    "label": "Faiss (Facebook)",
                     "value": "faiss"
                 }
             ],
@@ -140,7 +140,7 @@
             "visibilityCondition": "model.algorithm == 'annoy' && model.expert"
         },
         {
-            "name": "faiss_index",
+            "name": "faiss_index_type",
             "label": "Index type",
             "type": "SELECT",
             "selectChoices": [
@@ -163,10 +163,10 @@
         {
             "name": "faiss_lsh_num_bits",
             "type": "INT",
-            "defaultValue": 4,
+            "defaultValue": 8,
             "minI": 4,
             "label": "Number of LSH bits",
-            "visibilityCondition": "model.algorithm == 'faiss' && model.faiss_index=='IndexLSH' && model.expert"
+            "visibilityCondition": "model.algorithm == 'faiss' && model.faiss_index_type == 'IndexLSH' && model.expert"
         }
     ],
     "resourceKeys": []

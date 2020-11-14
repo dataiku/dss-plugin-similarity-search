@@ -41,14 +41,14 @@ def load_indexing_recipe_params() -> Dict:
         raise PluginParamValidationError("Output folder must be on the local filesystem")
     # Recipe configuration parameters
     recipe_config = get_recipe_config()
-    params["primary_key_column"] = recipe_config.get("primary_key_column")
-    if params["primary_key_column"] not in input_dataset_columns:
-        raise PluginParamValidationError(f"Invalid primary key column: {params['primary_key_column']}")
+    params["unique_id_column"] = recipe_config.get("unique_id_column")
+    if params["unique_id_column"] not in input_dataset_columns:
+        raise PluginParamValidationError(f"Invalid unique ID column: {params['unique_id_column']}")
     params["feature_columns"] = recipe_config.get("feature_columns", [])
     if not set(params["feature_columns"]).issubset(set(input_dataset_columns)):
         raise PluginParamValidationError(f"Invalid feature column(s): {params['feature_columns']}")
     params["input_df"] = input_dataset.get_dataframe(
-        columns=[params["primary_key_column"]] + params["feature_columns"], infer_with_pandas=False
+        columns=[params["unique_id_column"]] + params["feature_columns"], infer_with_pandas=False
     )
     params["algorithm"] = recipe_config.get("algorithm")
     if params["algorithm"] not in {"annoy", "faiss"}:
@@ -64,14 +64,14 @@ def load_indexing_recipe_params() -> Dict:
         if params["annoy_num_trees"] < 1:
             raise PluginParamValidationError("Number of trees must be above 1")
     elif params["algorithm"] == "faiss":
-        params["faiss_index"] = recipe_config.get("faiss_index")
-        if params["faiss_index"] not in {"IndexFlatL2", "IndexFlatIP", "IndexLSH"}:
-            raise PluginParamValidationError(f"Invalid FAISS index type: {params['faiss_index']}")
+        params["faiss_index_type"] = recipe_config.get("faiss_index_type")
+        if params["faiss_index_type"] not in {"IndexFlatL2", "IndexFlatIP", "IndexLSH"}:
+            raise PluginParamValidationError(f"Invalid FAISS index type: {params['faiss_index_type']}")
         params["faiss_lsh_num_bits"] = recipe_config.get("faiss_lsh_num_bits")
         if not isinstance(params["faiss_lsh_num_bits"], int):
             raise PluginParamValidationError(f"Invalid number of LSH bits: {params['faiss_lsh_num_bits']}")
-        if params["faiss_lsh_num_bits"] < 1:
-            raise PluginParamValidationError("Number of LSH bits must be above 1")
+        if params["faiss_lsh_num_bits"] < 4:
+            raise PluginParamValidationError("Number of LSH bits must be above 4")
     printable_params = {k: v for k, v in params.items() if k != "input_df"}
     logging.info(f"Validated plugin recipe parameters: {printable_params}")
     return params

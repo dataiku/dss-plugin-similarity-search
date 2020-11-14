@@ -1,69 +1,48 @@
 # -*- coding: utf-8 -*-
 
-import os
-import json
+import numpy as np
+from typing import AnyStr
 
 import faiss
 
 from models.base import NearestNeighborSearchAlgorithm
+from plugin_utils import time_logging
 
 
 class FaissAlgorithm(NearestNeighborSearchAlgorithm):
-    """Wrapper class for the FAISS Nearest Neighbor Search algorithm"""
+    """Wrapper class for the Faiss Nearest Neighbor Search algorithm"""
 
-    def __init__(self, *args, **kwargs):
-        self._index = kwargs.get("faiss_index")
-        self._dims = kwargs.get("dims")
-        self._lsh_n_bits = int(kwargs.get("faiss_lsh_num_bits", 4))
+    def __init__(self, num_dimensions: int, **kwargs):
+        self.num_dimensions = num_dimensions
+        self.index_type = kwargs.get("faiss_index_type")
+        self.config = {"model": "faiss", "num_dimensions": self.num_dimensions, "index_type": self.index_type}
+        if self.index_type == "IndexFlatL2":
+            self.index = faiss.IndexFlatL2(self.num_dimensions)
+        elif self.index_type == "IndexFlatIP":
+            self.index = faiss.IndexFlatIP(self.num_dimensions)
+        elif self.index_type == "IndexLSH":
+            self.lsh_num_bits = int(kwargs.get("faiss_lsh_num_bits", 4))
+            self.index = faiss.IndexLSH(self.num_dimensions, self.lsh_num_bits)
+            self.config["lsh_num_bits"] = self.lsh_num_bits
+        else:
+            raise NotImplementedError(f"Faiss index '{self.index_type}' not implemented'")
 
-    def fit_and_save(self, names, vectors, folder_path):
-        """
-        Create requested index from params.
-        Add vectors and store index.
-        Generate configuration file and save alongside the index.
-        """
-        if self._index == "IndexFlatL2":
-            index = faiss.IndexFlatL2(self._dims)
-        elif self._index == "IndexFlatIP":
-            index = faiss.IndexFlatIP(self._dims)
-        elif self._index == "IndexLSH":
-            index = faiss.IndexLSH(self._dims, self._lsh_n_bits)
+    @time_logging(log_message="Building Faiss index on file")
+    def build_save_index(self, vectors: np.array, file_path: AnyStr) -> None:
+        """Initialize index on disk, add vectors by batch and save to disk"""
+        if self.index.is_trained:
+            self.index.add(vectors)
+        else:
+            raise NotImplementedError("Faiss training methods not implemented")
+        faiss.write_index(self.index, file_path)
 
-        index.add(vectors)
-        faiss.write_index(index, os.path.join(folder_path, "index.nns"))
+    def load_index(self, file_path: AnyStr) -> None:
+        """Load saved index into memory"""
+        self.index.load(file_path)
 
-        names_dict = dict(zip(range(len(names)), names))
-
-        config = self._create_config(names_dict)
-        with open(os.path.join(folder_path, "config.json"), "w") as fp:
-            json.dump(config, fp)
-
-    def _create_config(self, names_dict):
-        """
-        Generated needed config to be able to load and query the index.
-        """
-        return json.dumps(
-            {
-                "model": self.__str__(),
-                "index_file": "index.nns",
-                "faiss_index": self._index,
-                "faiss_lsh_n_bits": self._lsh_n_bits,
-                "dims": self._dims,
-                "names_dict": names_dict,
-            }
-        )
-
-    def load(self, index_file_path):
-        self.index = faiss.read_index(index_file_path)
-        return self
-
-    def find_near_neighbors(self, vectors, number_of_neighbors=5):
-        """
-        Bulk lookup the vectors.
-        Return only indices list, ignore the distances for now.
-        """
-        distances, indices = self.index.search(vectors, number_of_neighbors)
-        return indices
-
-    def __str__(self):
-        return "faiss"
+    def lookup_neighbors(self, vectors: np.array, num_neighbors: int = 5) -> np.array:
+        """No bulk lookup supported by the library so it has to be done in loop"""
+        nns = []
+        for vector in vectors:
+            nns.append(self.index.get_nns_by_vector(vector, num_neighbors))
+        return np.array(nns)
