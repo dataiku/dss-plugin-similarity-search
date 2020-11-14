@@ -5,8 +5,8 @@ from typing import AnyStr, Dict
 import numpy as np
 
 
-class NearestNeighborSearchAlgorithm:
-    """Base class for all Nearest Neighbor Search algorithms"""
+class SimilaritySearchAlgorithm:
+    """Base class for all Similarity Search algorithms"""
 
     INDEX_FILE_NAME = "index.nns"
     CONFIG_FILE_NAME = "config.json"
@@ -33,6 +33,10 @@ class NearestNeighborSearchAlgorithm:
 
     def __str__(self) -> AnyStr:
         return self.name
+
+    def get_config(self) -> Dict:
+        """Algorithm-specific method to specify for each implementation"""
+        raise NotImplementedError("Get config method not implemented")
 
     def build_save_index(self, vector_ids: np.array, vectors: np.array, file_path: AnyStr) -> Dict:
         """Algorithm-specific method to specify for each implementation"""

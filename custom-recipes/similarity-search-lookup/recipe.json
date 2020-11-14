@@ -19,7 +19,7 @@
         {
             "name": "index_folder",
             "label": "Index folder",
-            "description": "Folder containing a previously trained index",
+            "description": "Local filesystem folder containing a saved index",
             "arity": "UNARY",
             "required": true,
             "mustBeStrictlyType": "Filesystem",
@@ -78,6 +78,7 @@
             "name": "num_neighbors",
             "label": "Number of neighbors",
             "type": "INT",
+            "description": "Nearest neighbors from the pre-computed index",
             "defaultValue": 5,
             "minI": 1,
             "maxI": 1000,

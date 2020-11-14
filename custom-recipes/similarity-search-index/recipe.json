@@ -18,9 +18,9 @@
     ],
     "outputRoles": [
         {
-            "name": "output_folder",
-            "label": "Output folder",
-            "description": "Folder to store the trained index",
+            "name": "index_folder",
+            "label": "Index folder",
+            "description": "Local filesystem folder to save the index",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": false,
