@@ -1,7 +1,7 @@
 {
     "meta": {
-        "label": "Nearest Neighbor Indexing",
-        "description": "Build indices required to search for nearest neighbors",
+        "label": "1. Build Nearest Neighbor Search index",
+        "description": "Build index required to search for nearest neighbors",
         "icon": "icon-barcode",
         "displayOrderRank": 1
     },

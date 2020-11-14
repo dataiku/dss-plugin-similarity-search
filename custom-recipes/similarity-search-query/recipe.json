@@ -1,6 +1,6 @@
 {
     "meta": {
-        "label": "Nearest Neighbor Search",
+        "label": "2. Find Nearest Neighbors",
         "description": "Find the nearest neighbors of each row of a dataset using a pre-computed index",
         "icon": "icon-spinner",
         "displayOrderRank": 2

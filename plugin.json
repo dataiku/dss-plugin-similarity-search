@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "meta": {
         "label": "Similarity Search",
-        "description": "Find similar items in your data using Nearest Neighbor Indexing and Search",
+        "description": "Find similar items in your data using Nearest Neighbor Search indices",
         "category": "Recommender System",
         "author": "Dataiku (Liev GARCIA, Thibault DESFONTAINES, Alex COMBESSIE)",
         "icon": "icon-barcode",
