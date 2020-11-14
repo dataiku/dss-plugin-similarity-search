@@ -15,7 +15,7 @@ params = load_indexing_recipe_params()
 columns = [params["unique_id_column"]] + params["feature_columns"]
 input_df = params["input_dataset"].get_dataframe(columns=columns, infer_with_pandas=False)
 data_loader = DataLoader(params["unique_id_column"], params["feature_columns"])
-(vector_ids, vectors) = data_loader.load_df(input_df)
+(vector_ids, vectors) = data_loader.convert_df_to_vectors(input_df)
 
 # Build index and save index file to output folder
 algorithm = SimilaritySearchAlgorithm(num_dimensions=vectors.shape[1], **params)

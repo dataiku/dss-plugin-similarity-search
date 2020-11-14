@@ -18,12 +18,12 @@ class SimilaritySearchAlgorithm:
     QUERY_COLUMN_NAME = "query_id"
     NEIGHBOR_COLUMN_NAME = "neighbor_id"
     COLUMN_DESCRIPTIONS = {
-        QUERY_COLUMN_NAME: "Unique ID from the input dataset",
-        NEIGHBOR_COLUMN_NAME: "Neighbor ID from the pre-computed index",
+        QUERY_COLUMN_NAME: "Input query ID",
+        NEIGHBOR_COLUMN_NAME: "Neighbor ID in the pre-computed index",
     }
 
     def __new__(cls, *args, **kwargs):
-        """Determine based on the arguments the appropriate algorithm"""
+        """Determine the appropriate algorithm based on the arguments"""
         algorithm = kwargs.get("algorithm")
         if algorithm == "annoy":
             from models.annoy import AnnoyAlgorithm  # noqa
@@ -64,6 +64,7 @@ class SimilaritySearchAlgorithm:
         df: pd.DataFrame,
         unique_id_column: AnyStr,
         feature_columns: List[AnyStr],
+        index_vector_ids: np.array,
         num_neighbors: int = 5,
         **kwargs,
     ) -> pd.DataFrame:
@@ -71,11 +72,13 @@ class SimilaritySearchAlgorithm:
         output_df = pd.DataFrame()
         output_df[self.QUERY_COLUMN_NAME] = df[unique_id_column]
         data_loader = DataLoader(unique_id_column, feature_columns)
-        (vector_ids, vectors) = data_loader.load_df(df, verbose=False)
+        (vector_ids, vectors) = data_loader.convert_df_to_vectors(df, verbose=False)
         if vectors.shape[1] != self.num_dimensions:
             raise ValueError(
                 "Incompatible number of dimensions: "
-                + f"{self.num_dimensions} in index, {vectors.shape[1]} in input dataset"
+                + f"{self.num_dimensions} in index, {vectors.shape[1]} in feature column(s)"
             )
         output_df[self.NEIGHBOR_COLUMN_NAME] = self.find_neighbors_vector(vectors, num_neighbors)
+        output_df = output_df.explode(self.NEIGHBOR_COLUMN_NAME)
+
         return output_df

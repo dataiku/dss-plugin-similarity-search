@@ -10,13 +10,6 @@
     "selectableFromFolder": "index_folder",
     "inputRoles": [
         {
-            "name": "input_dataset",
-            "label": "Input dataset",
-            "arity": "UNARY",
-            "required": true,
-            "acceptsDataset": true
-        },
-        {
             "name": "index_folder",
             "label": "Index folder",
             "description": "Local filesystem folder containing a pre-computed index",
@@ -25,6 +18,14 @@
             "mustBeStrictlyType": "Filesystem",
             "acceptsManagedFolder": true,
             "acceptsDataset": false
+        },
+        {
+            "name": "input_dataset",
+            "label": "Input dataset",
+            "description": "Dataset containing numeric or vector data (e.g. embeddings) - May be different from the one used to build indices",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
         }
     ],
     "outputRoles": [

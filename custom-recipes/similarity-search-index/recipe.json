@@ -11,6 +11,7 @@
         {
             "name": "input_dataset",
             "label": "Input dataset",
+            "description": "Dataset containing numeric or vector data (e.g. embeddings) ",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true

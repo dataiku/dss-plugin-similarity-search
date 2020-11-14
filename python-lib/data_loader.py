@@ -36,8 +36,8 @@ class DataLoader:
             if df[column].isnull().values.any():
                 raise ValueError(f"Empty values in column '{column}'")
 
-    def load_df(self, df: pd.DataFrame, verbose: bool = True) -> Tuple[np.array, np.array]:
-        """Load a dataframe into the vector format required by Similarity Search algorithms"""
+    def convert_df_to_vectors(self, df: pd.DataFrame, verbose: bool = True) -> Tuple[np.array, np.array]:
+        """Convert a dataframe into the vector format required by Similarity Search algorithms"""
         start = perf_counter()
         self._validate_df(df)
         if verbose:
@@ -48,7 +48,7 @@ class DataLoader:
         vector_ids = df[self.unique_id_column].values
         vectors = np.empty(shape=(len(df.index), self.MAX_VECTOR_LENGTH))
         i = 0
-        for column in sorted(self.feature_columns):
+        for column in self.feature_columns:
             column_is_vector = df[column].dtype == "object" and df[column].str.startswith("[").all()
             if column_is_vector:
                 try:

@@ -134,3 +134,9 @@ def save_array(array: np.array, path: AnyStr, folder: dataiku.Folder, compress: 
             np.savez(tmp, array)
         _ = tmp.seek(0)  # Oh, take me back to the start
         folder.upload_stream(path, tmp)
+
+
+def load_array(array: np.array, path: AnyStr, folder: dataiku.Folder) -> None:
+    """Load a numpy array from a Dataiku folder"""
+    with NamedTemporaryFile() as tmp:
+        folder.upload_stream(path, tmp)
