@@ -21,12 +21,11 @@
         {
             "name": "index_folder",
             "label": "Index folder",
-            "description": "Local filesystem folder to save the index",
+            "description": "Folder where the index will be saved",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": false,
-            "acceptsManagedFolder": true,
-            "mustBeStrictlyType": "Filesystem"
+            "acceptsManagedFolder": true
         }
     ],
     "params": [

@@ -38,7 +38,7 @@ class Annoy(NearestNeighborSearch):
             self.index.add_item(i, vector.tolist())
         self.index.build(n_trees=self.annoy_num_trees)
 
-    @time_logging(log_message="Loading pre-computed index from disk")
+    @time_logging(log_message="Loading pre-computed index")
     def load_index(self, file_path: AnyStr) -> None:
         self.index.load(file_path)
 

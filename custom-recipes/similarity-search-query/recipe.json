@@ -12,10 +12,9 @@
         {
             "name": "index_folder",
             "label": "Index folder",
-            "description": "Local filesystem folder containing a pre-computed index",
+            "description": "Folder containing a pre-computed index",
             "arity": "UNARY",
             "required": true,
-            "mustBeStrictlyType": "Filesystem",
             "acceptsManagedFolder": true,
             "acceptsDataset": false
         },
@@ -79,7 +78,7 @@
             "name": "num_neighbors",
             "label": "Number of neighbors",
             "type": "INT",
-            "description": "Nearest neighbors from the pre-computed index",
+            "description": "Nearest neighbors from the index",
             "defaultValue": 5,
             "minI": 1,
             "maxI": 1000,

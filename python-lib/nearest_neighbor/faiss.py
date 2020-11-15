@@ -45,7 +45,7 @@ class Faiss(NearestNeighborSearch):
             raise NotImplementedError("Faiss training methods not implemented")
         faiss.write_index(self.index, index_path)
 
-    @time_logging(log_message="Loading pre-computed index from disk")
+    @time_logging(log_message="Loading pre-computed index")
     def load_index(self, file_path: AnyStr) -> None:
         self.index = faiss.read_index(file_path)
 
