@@ -2,7 +2,7 @@
 """Module for the Annoy Nearest Neighbor Search algorithm"""
 
 import numpy as np
-from typing import AnyStr, Dict, List
+from typing import AnyStr, Dict, List, Tuple
 
 import annoy
 from tqdm import tqdm
@@ -42,6 +42,9 @@ class Annoy(NearestNeighborSearch):
     def load_index(self, file_path: AnyStr) -> None:
         self.index.load(file_path)
 
-    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List:
-        neighbors = [self.index.get_nns_by_vector(vector, num_neighbors) for vector in vectors]
-        return neighbors
+    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List[List[Tuple]]:
+        output = []
+        for vector in vectors:
+            (neighbors, distances) = self.index.get_nns_by_vector(vector, num_neighbors, include_distances=True)
+            output.append(list(zip(neighbors, distances)))
+        return output

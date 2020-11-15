@@ -2,7 +2,7 @@
 """Module for the Annoy Nearest Neighbor Search algorithm"""
 
 import numpy as np
-from typing import AnyStr, Dict, List
+from typing import AnyStr, Dict, List, Tuple
 
 import faiss
 
@@ -49,6 +49,7 @@ class Faiss(NearestNeighborSearch):
     def load_index(self, file_path: AnyStr) -> None:
         self.index = faiss.read_index(file_path)
 
-    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List:
-        (_, neighbors) = self.index.search(vectors, num_neighbors)
-        return neighbors.tolist()
+    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List[List[Tuple]]:
+        (distances, neighbors) = self.index.search(vectors, num_neighbors)
+        output = [list(zip(neighbor, distances[i])) for i, neighbor in enumerate(neighbors)]
+        return output
