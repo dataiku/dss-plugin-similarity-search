@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module for the Annoy Nearest Neighbor Search algorithm"""
+"""Module for the Faiss Nearest Neighbor Search algorithm"""
 
 import numpy as np
 from typing import AnyStr, Dict, List, Tuple
