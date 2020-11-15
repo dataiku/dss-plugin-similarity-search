@@ -163,7 +163,7 @@
         {
             "name": "faiss_lsh_num_bits",
             "type": "INT",
-            "defaultValue": 8,
+            "defaultValue": 16,
             "minI": 4,
             "label": "Number of LSH bits",
             "visibilityCondition": "model.algorithm == 'faiss' && model.faiss_index_type == 'IndexLSH' && model.expert"
