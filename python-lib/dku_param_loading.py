@@ -12,8 +12,8 @@ from dataiku.customrecipe import get_recipe_config, get_input_names_for_role, ge
 class RecipeID(Enum):
     """Enum class to identify each recipe"""
 
-    SIMILARITY_SEARCH_INDEX = "Nearest Neighbor Indexing"
-    SIMILARITY_SEARCH_QUERY = "Nearest Neighbor Search"
+    SIMILARITY_SEARCH_INDEX = "Build Nearest Neighbor Search index"
+    SIMILARITY_SEARCH_QUERY = "Find Nearest Neighbors"
 
 
 class PluginParamValidationError(ValueError):
