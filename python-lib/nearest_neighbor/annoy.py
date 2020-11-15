@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Module for the Annoy Nearest Neighbor Search algorithm"""
 
 import numpy as np
 from typing import AnyStr, Dict, List
@@ -6,12 +7,12 @@ from typing import AnyStr, Dict, List
 import annoy
 from tqdm import tqdm
 
-from similarity_search_algorithms.base import SimilaritySearchAlgorithm
-from plugin_utils import time_logging
+from nearest_neighbor.base import NearestNeighborSearch
+from utils import time_logging
 
 
-class Annoy(SimilaritySearchAlgorithm):
-    """Wrapper class for the Annoy Similarity Search algorithm"""
+class Annoy(NearestNeighborSearch):
+    """Wrapper class for the Annoy Nearest Neighbor Search algorithm"""
 
     def __init__(self, num_dimensions: int, **kwargs):
         super().__init__(num_dimensions)

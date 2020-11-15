@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module to load data into a format usable by models"""
+"""Module to load data into a format usable by Nearest Neighbor Search algorithms"""
 
 import json
 import logging

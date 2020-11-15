@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Module with read/write utility functions based on the Dataiku API"""
+"""Module with read/write utility functions using the Dataiku API"""
 
 import logging
 import math

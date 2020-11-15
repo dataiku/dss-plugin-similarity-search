@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Module to wrap all Nearest Neighbor Search algorithms"""
 
 from typing import AnyStr, Dict, List
 
@@ -8,8 +9,8 @@ import pandas as pd
 from data_loader import DataLoader
 
 
-class SimilaritySearchAlgorithm:
-    """Base class for all Similarity Search algorithms"""
+class NearestNeighborSearch:
+    """Base class for all Nearest Neighbor Search algorithms"""
 
     INDEX_FILE_NAME = "index.nns"
     CONFIG_FILE_NAME = "config.json"
@@ -26,13 +27,13 @@ class SimilaritySearchAlgorithm:
         """Determine the appropriate algorithm based on the arguments"""
         algorithm = kwargs.get("algorithm")
         if algorithm == "annoy":
-            from similarity_search_algorithms.annoy import Annoy  # noqa
+            from nearest_neighbor.annoy import Annoy  # noqa
 
             for i in cls.__subclasses__():
                 if i.__name__ == "Annoy":
                     return super().__new__(i)
         elif algorithm == "faiss":
-            from similarity_search_algorithms.faiss import Faiss  # noqa
+            from nearest_neighbor.faiss import Faiss  # noqa
 
             for i in cls.__subclasses__():
                 if i.__name__ == "Faiss":

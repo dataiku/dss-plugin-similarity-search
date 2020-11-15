@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
+"""Module for the Annoy Nearest Neighbor Search algorithm"""
 
 import numpy as np
 from typing import AnyStr, Dict, List
 
 import faiss
 
-from similarity_search_algorithms.base import SimilaritySearchAlgorithm
-from plugin_utils import time_logging
+from nearest_neighbor.base import NearestNeighborSearch
+from utils import time_logging
 
 
-class Faiss(SimilaritySearchAlgorithm):
-    """Wrapper class for the Faiss Similarity Search algorithm"""
+class Faiss(NearestNeighborSearch):
+    """Wrapper class for the Faiss Nearest Neighbor Search algorithm"""
 
     def __init__(self, num_dimensions: int, **kwargs):
         super().__init__(num_dimensions)
