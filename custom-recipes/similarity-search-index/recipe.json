@@ -158,7 +158,7 @@
                     "value": "IndexLSH"
                 }
             ],
-            "defaultValue": "IndexLSH",
+            "defaultValue": "IndexFlatL2",
             "visibilityCondition": "model.algorithm == 'faiss' && model.expert"
         },
         {
