@@ -1,3 +1,4 @@
 annoy==1.16.3
 faiss-cpu==1.6.1
 simplejson==3.17.0
+tqdm==4.51.0

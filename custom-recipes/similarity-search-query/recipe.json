@@ -1,0 +1,89 @@
+{
+    "meta": {
+        "label": "2. Find Nearest Neighbors",
+        "description": "Find the nearest neighbors of each row of a dataset using a pre-computed index",
+        "icon": "icon-spinner",
+        "displayOrderRank": 2
+    },
+    "kind": "PYTHON",
+    "selectableFromDataset": "input_dataset",
+    "selectableFromFolder": "index_folder",
+    "inputRoles": [
+        {
+            "name": "index_folder",
+            "label": "Index folder",
+            "description": "Folder containing a pre-computed index",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsManagedFolder": true,
+            "acceptsDataset": false
+        },
+        {
+            "name": "input_dataset",
+            "label": "Input dataset",
+            "description": "Dataset containing numeric or vector data (e.g. embeddings) - May be different from the one used to build indices",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+    "outputRoles": [
+        {
+            "name": "output_dataset",
+            "label": "Output dataset",
+            "description": "Dataset with identified nearest neighbors for each row",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+    "params": [
+        {
+            "name": "separator_input",
+            "label": "Input parameters",
+            "type": "SEPARATOR"
+        },
+        {
+            "name": "unique_id_column",
+            "type": "COLUMN",
+            "columnRole": "input_dataset",
+            "label": "Unique ID column",
+            "description": "Column that uniquely identifies each row",
+            "mandatory": true
+        },
+        {
+            "name": "feature_columns",
+            "type": "COLUMNS",
+            "columnRole": "input_dataset",
+            "description": "Columns containing numeric or vector data (e.g. embeddings) in the same order as the index",
+            "label": "Feature column(s)",
+            "allowedColumnTypes": [
+                "tinyint",
+                "smallint",
+                "int",
+                "bigint",
+                "float",
+                "double",
+                "vector",
+                "string"
+            ],
+            "mandatory": true
+        },
+        {
+            "name": "separator_lookup",
+            "label": "Lookup parameters",
+            "type": "SEPARATOR"
+        },
+        {
+            "name": "num_neighbors",
+            "label": "Number of neighbors",
+            "type": "INT",
+            "description": "Nearest neighbors from the index",
+            "defaultValue": 5,
+            "minI": 1,
+            "maxI": 1000,
+            "mandatory": true
+        }
+    ],
+    "resourceKeys": []
+}

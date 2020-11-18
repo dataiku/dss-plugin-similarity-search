@@ -1,0 +1,173 @@
+{
+    "meta": {
+        "label": "1. Build Nearest Neighbor Search index",
+        "description": "Build index required to search for nearest neighbors",
+        "icon": "icon-barcode",
+        "displayOrderRank": 1
+    },
+    "kind": "PYTHON",
+    "selectableFromDataset": "input_dataset",
+    "inputRoles": [
+        {
+            "name": "input_dataset",
+            "label": "Input dataset",
+            "description": "Dataset containing numeric or vector data (e.g. embeddings) ",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": true
+        }
+    ],
+    "outputRoles": [
+        {
+            "name": "index_folder",
+            "label": "Index folder",
+            "description": "Folder where the index will be saved",
+            "arity": "UNARY",
+            "required": true,
+            "acceptsDataset": false,
+            "acceptsManagedFolder": true
+        }
+    ],
+    "params": [
+        {
+            "name": "separator_input",
+            "label": "Input parameters",
+            "type": "SEPARATOR"
+        },
+        {
+            "name": "unique_id_column",
+            "type": "COLUMN",
+            "columnRole": "input_dataset",
+            "label": "Unique ID column",
+            "description": "Column that uniquely identifies each row",
+            "mandatory": true
+        },
+        {
+            "name": "feature_columns",
+            "type": "COLUMNS",
+            "columnRole": "input_dataset",
+            "description": "Columns containing numeric or vector data (e.g. embeddings)",
+            "label": "Feature column(s)",
+            "allowedColumnTypes": [
+                "tinyint",
+                "smallint",
+                "int",
+                "bigint",
+                "float",
+                "double",
+                "vector",
+                "string"
+            ],
+            "mandatory": true
+        },
+        {
+            "name": "separator_modeling",
+            "label": "Modeling parameters",
+            "type": "SEPARATOR"
+        },
+        {
+            "name": "algorithm",
+            "type": "SELECT",
+            "label": "Algorithm",
+            "selectChoices": [
+                {
+                    "label": "Annoy (Spotify)",
+                    "value": "annoy"
+                },
+                {
+                    "label": "Faiss (Facebook)",
+                    "value": "faiss"
+                }
+            ],
+            "mandatory": true,
+            "defaultValue": "annoy"
+        },
+        {
+            "name": "expert",
+            "label": "Expert mode",
+            "type": "BOOLEAN",
+            "defaultValue": false
+        },
+        {
+            "name": "annoy_separator_advanced",
+            "label": "Advanced",
+            "type": "SEPARATOR",
+            "description": "Detailed documentation: https://github.com/spotify/annoy#how-does-it-work",
+            "visibilityCondition": "model.algorithm == 'annoy' && model.expert"
+        },
+        {
+            "name": "faiss_separator_advanced",
+            "label": "Advanced",
+            "type": "SEPARATOR",
+            "description": "Detailed documentation: https://github.com/facebookresearch/faiss/wiki",
+            "visibilityCondition": "model.algorithm == 'faiss' && model.expert"
+        },
+        {
+            "name": "annoy_metric",
+            "label": "Distance metric",
+            "type": "SELECT",
+            "selectChoices": [
+                {
+                    "label": "Angular",
+                    "value": "angular"
+                },
+                {
+                    "label": "Euclidean",
+                    "value": "euclidean"
+                },
+                {
+                    "label": "Manhattan",
+                    "value": "manhattan"
+                },
+                {
+                    "label": "Hamming",
+                    "value": "hamming"
+                },
+                {
+                    "label": "Dot",
+                    "value": "dot"
+                }
+            ],
+            "defaultValue": "angular",
+            "visibilityCondition": "model.algorithm == 'annoy' && model.expert"
+        },
+        {
+            "name": "annoy_num_trees",
+            "type": "INT",
+            "defaultValue": 10,
+            "minI": 1,
+            "label": "Number of trees",
+            "visibilityCondition": "model.algorithm == 'annoy' && model.expert"
+        },
+        {
+            "name": "faiss_index_type",
+            "label": "Index type",
+            "type": "SELECT",
+            "selectChoices": [
+                {
+                    "label": "Exact Search for L2",
+                    "value": "IndexFlatL2"
+                },
+                {
+                    "label": "Exact Search for Inner Product",
+                    "value": "IndexFlatIP"
+                },
+                {
+                    "label": "Locality-Sensitive Hashing",
+                    "value": "IndexLSH"
+                }
+            ],
+            "defaultValue": "IndexFlatL2",
+            "visibilityCondition": "model.algorithm == 'faiss' && model.expert"
+        },
+        {
+            "name": "faiss_lsh_num_bits",
+            "type": "INT",
+            "defaultValue": 16,
+            "minI": 4,
+            "label": "Number of LSH bits",
+            "visibilityCondition": "model.algorithm == 'faiss' && model.faiss_index_type == 'IndexLSH' && model.expert"
+        }
+    ],
+    "resourceKeys": []
+}
