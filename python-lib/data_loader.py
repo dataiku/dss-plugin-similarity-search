@@ -49,7 +49,7 @@ class DataLoader:
                 + f"{len(self.feature_columns)} column(s) into vector format..."
             )
         vector_ids = df[self.unique_id_column].values
-        vectors = np.empty(shape=(len(df.index), self.MAX_VECTOR_LENGTH))
+        vectors = np.empty(shape=(len(df.index), self.MAX_VECTOR_LENGTH))  # pre-allocate empty array of fixed size
         i = 0
         for column in self.feature_columns:
             column_is_vector = df[column].dtype == "object" and df[column].str.startswith("[").all()
