@@ -70,7 +70,7 @@ def load_input_output_params(recipe_id: RecipeID) -> Dict:
 
 
 def load_indexing_recipe_params() -> Dict:
-    """Load and validate parameters of the Nearest Neighbor Indexing recipe
+    """Load and validate parameters of the Build Nearest Neighbor Search index recipe
 
     Returns:
         Dictionary of parameter names (key) and values
@@ -79,7 +79,7 @@ def load_indexing_recipe_params() -> Dict:
         PluginParamValidationError: If a parameter is not valid
 
     """
-    logging.info("Validating Nearest Neighbor Indexing parameters...")
+    logging.info("Validating Build Nearest Neighbor Search index recipe parameters...")
     input_output_params = load_input_output_params(RecipeID.SIMILARITY_SEARCH_INDEX)
     # Recipe modeling parameters
     modeling_params = {}
@@ -111,7 +111,7 @@ def load_indexing_recipe_params() -> Dict:
 
 
 def load_search_recipe_params() -> Dict:
-    """Load and validate parameters of the Nearest Neighbor Search recipe
+    """Load and validate parameters of the Find Nearest Neighbors recipe
 
     Returns:
         Dictionary of parameter names (key) and values
@@ -120,7 +120,7 @@ def load_search_recipe_params() -> Dict:
         PluginParamValidationError: If a parameter is not valid
 
     """
-    logging.info("Validating Nearest Neighbor Search parameters...")
+    logging.info("Validating Find Nearest Neighbors recipe parameters...")
     input_output_params = load_input_output_params(RecipeID.SIMILARITY_SEARCH_QUERY)
     # Recipe lookup parameters
     lookup_params = {}
