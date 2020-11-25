@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Module for the Annoy Nearest Neighbor Search algorithm"""
 
+import logging
+
 import numpy as np
 from typing import AnyStr, Dict, List, Tuple
 
@@ -37,6 +39,7 @@ class Annoy(NearestNeighborSearch):
         for i, vector in enumerate(tqdm(vectors, mininterval=1.0)):
             self.index.add_item(i, vector.tolist())
         self.index.build(n_trees=self.annoy_num_trees)
+        logging.info(f"Index file path: {index_path}")
 
     @time_logging(log_message="Loading pre-computed index")
     def load_index(self, file_path: AnyStr) -> None:

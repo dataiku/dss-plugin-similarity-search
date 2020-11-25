@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Module for the Faiss Nearest Neighbor Search algorithm"""
 
+import logging
+
 import numpy as np
 from typing import AnyStr, Dict, List, Tuple
 
@@ -44,6 +46,7 @@ class Faiss(NearestNeighborSearch):
         else:
             raise NotImplementedError("Faiss training methods not implemented")
         faiss.write_index(self.index, index_path)
+        logging.info(f"Index file path: {index_path}")
 
     @time_logging(log_message="Loading pre-computed index")
     def load_index(self, file_path: AnyStr) -> None:
