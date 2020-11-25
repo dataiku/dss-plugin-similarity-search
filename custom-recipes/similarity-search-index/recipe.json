@@ -122,10 +122,6 @@
                 {
                     "label": "Hamming",
                     "value": "hamming"
-                },
-                {
-                    "label": "Dot",
-                    "value": "dot"
                 }
             ],
             "defaultValue": "angular",
@@ -147,10 +143,6 @@
                 {
                     "label": "Exact Search for L2",
                     "value": "IndexFlatL2"
-                },
-                {
-                    "label": "Exact Search for Inner Product",
-                    "value": "IndexFlatIP"
                 },
                 {
                     "label": "Locality-Sensitive Hashing",

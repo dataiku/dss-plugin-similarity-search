@@ -90,7 +90,7 @@ def load_indexing_recipe_params() -> Dict:
     modeling_params["expert"] = bool(recipe_config.get("expert"))
     if modeling_params["algorithm"] == "annoy":
         modeling_params["annoy_metric"] = recipe_config.get("annoy_metric")
-        if modeling_params["annoy_metric"] not in {"angular", "euclidean", "manhattan", "hamming", "dot"}:
+        if modeling_params["annoy_metric"] not in {"angular", "euclidean", "manhattan", "hamming"}:
             raise PluginParamValidationError(f"Invalid Annoy distance metric: {modeling_params['annoy_metric']}")
         modeling_params["annoy_num_trees"] = recipe_config.get("annoy_num_trees")
         if not isinstance(modeling_params["annoy_num_trees"], int):
@@ -99,7 +99,7 @@ def load_indexing_recipe_params() -> Dict:
             raise PluginParamValidationError("Number of trees must be above 1")
     elif modeling_params["algorithm"] == "faiss":
         modeling_params["faiss_index_type"] = recipe_config.get("faiss_index_type")
-        if modeling_params["faiss_index_type"] not in {"IndexFlatL2", "IndexFlatIP", "IndexLSH"}:
+        if modeling_params["faiss_index_type"] not in {"IndexFlatL2", "IndexLSH"}:
             raise PluginParamValidationError(f"Invalid FAISS index type: {modeling_params['faiss_index_type']}")
         modeling_params["faiss_lsh_num_bits"] = recipe_config.get("faiss_lsh_num_bits")
         if not isinstance(modeling_params["faiss_lsh_num_bits"], int):

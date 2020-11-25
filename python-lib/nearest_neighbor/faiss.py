@@ -21,8 +21,6 @@ class Faiss(NearestNeighborSearch):
         self.faiss_lsh_num_bits = int(kwargs.get("faiss_lsh_num_bits", 4))
         if self.faiss_index_type == "IndexFlatL2":
             self.index = faiss.IndexFlatL2(self.num_dimensions)
-        elif self.faiss_index_type == "IndexFlatIP":
-            self.index = faiss.IndexFlatIP(self.num_dimensions)
         elif self.faiss_index_type == "IndexLSH":
             self.index = faiss.IndexLSH(self.num_dimensions, self.faiss_lsh_num_bits)
         else:
