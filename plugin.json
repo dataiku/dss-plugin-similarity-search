@@ -1,6 +1,6 @@
 {
     "id": "similarity-search",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "meta": {
         "label": "Similarity Search",
         "description": "Find similar items in your data using Nearest Neighbor Search indices",

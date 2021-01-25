@@ -13,7 +13,7 @@ import numpy as np
 class DataLoader:
     """Data loading class to convert numeric/vector data from pandas DataFrames into numpy.arrays"""
 
-    MAX_VECTOR_LENGTH = 2 ** 16  # hardcoded limit to keep vectors size under 65536
+    MAX_VECTOR_LENGTH = 2 ** 14  # hardcoded limit to keep vectors size under 16384
 
     def __init__(self, unique_id_column: AnyStr, feature_columns: List[AnyStr]):
         self.unique_id_column = unique_id_column
@@ -49,7 +49,17 @@ class DataLoader:
                 + f"{len(self.feature_columns)} column(s) into vector format..."
             )
         vector_ids = df[self.unique_id_column].values
-        vectors = np.empty(shape=(len(df.index), self.MAX_VECTOR_LENGTH))  # pre-allocate empty array of fixed size
+        vectors_length = self._count_vector_length(df)
+        vectors = self._load_vectors_from_df(df, vectors_length)
+        if verbose:
+            logging.info(
+                f"Loading dataframe into vector format: array of dimensions {vectors.shape} "
+                + f"loaded in {perf_counter() - start:.2f} seconds.",
+            )
+        return (vector_ids, vectors)
+
+    def _load_vectors_from_df(self, df: pd.DataFrame, vector_length: int) -> np.array:
+        vectors = np.empty(shape=(len(df.index), vector_length))  # pre-allocate empty array of fixed size
         i = 0
         for column in self.feature_columns:
             column_is_vector = df[column].dtype == "object" and df[column].str.startswith("[").all()
@@ -67,9 +77,10 @@ class DataLoader:
                 except ValueError as e:
                     raise ValueError(f"Invalid numeric data in column '{column}': {e}")
         vectors = np.ascontiguousarray(vectors[:, :i], dtype=np.float32)
-        if verbose:
-            logging.info(
-                f"Loading dataframe into vector format: array of dimensions {vectors.shape} "
-                + f"loaded in {perf_counter() - start:.2f} seconds.",
-            )
-        return (vector_ids, vectors)
+        return vectors
+
+    def _count_vector_length(self, df: pd.DataFrame) -> int:
+        vectors = self._load_vectors_from_df(df.head(1), self.MAX_VECTOR_LENGTH)
+        vectors_length = vectors.shape[1]
+        logging.info(f"Concatenated vector length: {vectors_length}")
+        return vectors_length
