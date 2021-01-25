@@ -56,6 +56,7 @@
                 "float",
                 "double",
                 "vector",
+                "array",
                 "string"
             ],
             "mandatory": true
