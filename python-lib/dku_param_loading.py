@@ -8,6 +8,8 @@ from enum import Enum
 import dataiku
 from dataiku.customrecipe import get_recipe_config, get_input_names_for_role, get_output_names_for_role
 
+from dku_folder_partition_handling import get_folder_partition_root, check_only_one_read_partition
+
 
 class RecipeID(Enum):
     """Enum class to identify each recipe"""
@@ -32,24 +34,28 @@ def load_input_output_params(recipe_id: RecipeID) -> Dict:
         PluginParamValidationError: If a parameter is not valid
 
     """
-    # Input dataset
     params = {}
-    input_dataset_names = get_input_names_for_role("input_dataset")
-    if len(input_dataset_names) == 0:
-        raise PluginParamValidationError("Please specify input folder")
-    params["input_dataset"] = dataiku.Dataset(input_dataset_names[0])
-    input_dataset_columns = [p["name"] for p in params["input_dataset"].read_schema()]
     # Index folder
     if recipe_id == RecipeID.SIMILARITY_SEARCH_INDEX:
         output_folder_names = get_output_names_for_role("index_folder")
         if len(output_folder_names) == 0:
             raise PluginParamValidationError("Please specify index folder as output")
         params["index_folder"] = dataiku.Folder(output_folder_names[0])
+        params["folder_partition_root"] = get_folder_partition_root(params["index_folder"])
     elif recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
         input_folder_names = get_input_names_for_role("index_folder")
         if len(input_folder_names) == 0:
             raise PluginParamValidationError("Please specify index folder as input")
         params["index_folder"] = dataiku.Folder(input_folder_names[0])
+        params["folder_partition_root"] = get_folder_partition_root(params["index_folder"], is_input=True)
+        check_only_one_read_partition(params["folder_partition_root"], params["index_folder"])
+    # Input dataset
+    input_dataset_names = get_input_names_for_role("input_dataset")
+    if len(input_dataset_names) == 0:
+        raise PluginParamValidationError("Please specify input dataset")
+    params["input_dataset"] = dataiku.Dataset(input_dataset_names[0])
+    input_dataset_columns = [p["name"] for p in params["input_dataset"].read_schema()]
+    check_only_one_read_partition(params["folder_partition_root"], params["input_dataset"])
     # Output dataset - only for search recipe
     if recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
         output_dataset_names = get_output_names_for_role("output_dataset")
