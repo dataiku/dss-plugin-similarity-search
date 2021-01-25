@@ -64,7 +64,6 @@
                 "bigint",
                 "float",
                 "double",
-                "vector",
                 "array",
                 "string"
             ],
