@@ -56,6 +56,11 @@ def load_input_output_params(recipe_id: RecipeID) -> Dict:
     params["input_dataset"] = dataiku.Dataset(input_dataset_names[0])
     input_dataset_columns = [p["name"] for p in params["input_dataset"].read_schema()]
     check_only_one_read_partition(params["folder_partition_root"], params["input_dataset"])
+    if recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
+        if params["index_folder"].read_partitions != params["input_dataset"].read_partitions:
+            raise PluginParamValidationError(
+                "Inconsistent partitions between index folder and input dataset, please make sure both are partitioned with the same dimensions"
+            )
     # Output dataset - only for search recipe
     if recipe_id == RecipeID.SIMILARITY_SEARCH_QUERY:
         output_dataset_names = get_output_names_for_role("output_dataset")
