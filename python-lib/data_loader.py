@@ -13,7 +13,7 @@ import numpy as np
 class DataLoader:
     """Data loading class to convert numeric/vector data from pandas DataFrames into numpy.arrays"""
 
-    MAX_VECTOR_LENGTH = 2 ** 14  # hardcoded limit to keep vectors size under 16384
+    MAX_VECTOR_LENGTH = 2 ** 16  # hardcoded limit to keep array size under 65 536
 
     def __init__(self, unique_id_column: AnyStr, feature_columns: List[AnyStr]):
         self.unique_id_column = unique_id_column
