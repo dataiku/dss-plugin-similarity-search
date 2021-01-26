@@ -16,7 +16,7 @@ params = load_indexing_recipe_params()
 columns = [params["unique_id_column"]] + params["feature_columns"]
 input_df = params["input_dataset"].get_dataframe(columns=columns, infer_with_pandas=False)
 data_loader = DataLoader(params["unique_id_column"], params["feature_columns"])
-(array_ids, arrays) = data_loader.convert_df_to_array(input_df)
+(array_ids, arrays) = data_loader.convert_df_to_arrays(input_df)
 
 # Build index and save index file to output folder
 nearest_neighbor = NearestNeighborSearch(num_dimensions=arrays.shape[1], **params)

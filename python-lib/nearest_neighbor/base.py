@@ -75,7 +75,7 @@ class NearestNeighborSearch:
         output_df = pd.DataFrame()
         output_df[self.INPUT_COLUMN_NAME] = df[unique_id_column]
         data_loader = DataLoader(unique_id_column, feature_columns)
-        (array_ids, arrays) = data_loader.convert_df_to_array(df, verbose=False)
+        (array_ids, arrays) = data_loader.convert_df_to_arrays(df, verbose=False)
         if arrays.shape[1] != self.num_dimensions:
             raise ValueError(
                 "Incompatible number of dimensions: "

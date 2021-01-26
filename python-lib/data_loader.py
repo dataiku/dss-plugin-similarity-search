@@ -39,7 +39,7 @@ class DataLoader:
             if df[column].isnull().values.any():
                 raise ValueError(f"Empty values in column '{column}'")
 
-    def convert_df_to_array(self, df: pd.DataFrame, verbose: bool = True) -> Tuple[np.array, np.array]:
+    def convert_df_to_arrays(self, df: pd.DataFrame, verbose: bool = True) -> Tuple[np.array, np.array]:
         """Convert a DataFrame into the array format required by Similarity Search algorithms"""
         start = perf_counter()
         self._validate_df(df)
