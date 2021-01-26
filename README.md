@@ -4,8 +4,6 @@
 
 This Dataiku DSS plugin provides two recipes to find similar items in your data using Nearest Neighbor Search indices.
 
-⚠️ This plugin is not currently compatible with [partitioning](https://doc.dataiku.com/dss/latest/partitions/index.html).
-
 Documentation: https://www.dataiku.com/product/plugins/similarity-search/
 
 ## License
