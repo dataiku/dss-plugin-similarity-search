@@ -38,9 +38,9 @@ class Faiss(NearestNeighborSearch):
         }
 
     @time_logging(log_message="Building index and saving to disk")
-    def build_save_index(self, vectors: np.array, index_path: AnyStr) -> None:
+    def build_save_index(self, arrays: np.array, index_path: AnyStr) -> None:
         if self.index.is_trained:
-            self.index.add(vectors)
+            self.index.add(arrays)
         else:
             raise NotImplementedError("Faiss training methods not implemented")
         faiss.write_index(self.index, index_path)
@@ -50,7 +50,7 @@ class Faiss(NearestNeighborSearch):
     def load_index(self, file_path: AnyStr) -> None:
         self.index = faiss.read_index(file_path)
 
-    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List[List[Tuple]]:
-        (distances, neighbors) = self.index.search(vectors, num_neighbors)
+    def find_neighbors_array(self, arrays: np.array, num_neighbors: int = 5) -> List[List[Tuple]]:
+        (distances, neighbors) = self.index.search(arrays, num_neighbors)
         output = [list(zip(neighbor, distances[i])) for i, neighbor in enumerate(neighbors)]
         return output

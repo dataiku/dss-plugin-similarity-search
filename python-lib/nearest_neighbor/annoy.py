@@ -34,10 +34,10 @@ class Annoy(NearestNeighborSearch):
         }
 
     @time_logging(log_message="Building index and saving to disk")
-    def build_save_index(self, vectors: np.array, index_path: AnyStr) -> None:
+    def build_save_index(self, arrays: np.array, index_path: AnyStr) -> None:
         self.index.on_disk_build(index_path)
-        for i, vector in enumerate(tqdm(vectors, mininterval=1.0)):
-            self.index.add_item(i, vector.tolist())
+        for i, array in enumerate(tqdm(arrays, mininterval=1.0)):
+            self.index.add_item(i, array.tolist())
         self.index.build(n_trees=self.annoy_num_trees)
         logging.info(f"Index file path: {index_path}")
 
@@ -45,9 +45,9 @@ class Annoy(NearestNeighborSearch):
     def load_index(self, file_path: AnyStr) -> None:
         self.index.load(file_path)
 
-    def find_neighbors_vector(self, vectors: np.array, num_neighbors: int = 5) -> List[List[Tuple]]:
+    def find_neighbors_array(self, arrays: np.array, num_neighbors: int = 5) -> List[List[Tuple]]:
         output = []
-        for vector in vectors:
-            (neighbors, distances) = self.index.get_nns_by_vector(vector, num_neighbors, include_distances=True)
+        for array in arrays:
+            (neighbors, distances) = self.index.get_nns_by_vector(array, num_neighbors, include_distances=True)
             output.append(list(zip(neighbors, distances)))
         return output
