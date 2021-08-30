@@ -11,7 +11,7 @@
         {
             "name": "input_dataset",
             "label": "Input dataset",
-            "description": "Dataset containing numeric or vector data (e.g. embeddings) ",
+            "description": "Dataset containing numeric or vector data e.g., embeddings",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
@@ -46,7 +46,7 @@
             "name": "feature_columns",
             "type": "COLUMNS",
             "columnRole": "input_dataset",
-            "description": "Columns containing numeric or vector data (e.g. embeddings)",
+            "description": "Columns containing numeric or vector data e.g., embeddings",
             "label": "Feature column(s)",
             "allowedColumnTypes": [
                 "tinyint",
