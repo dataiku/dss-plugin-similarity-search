@@ -21,7 +21,7 @@
         {
             "name": "input_dataset",
             "label": "Input dataset",
-            "description": "Dataset containing numeric or vector data (e.g. embeddings) - May be different from the one used to build indices",
+            "description": "Dataset containing numeric or vector data e.g., embeddings - May be different from the one used to build indices",
             "arity": "UNARY",
             "required": true,
             "acceptsDataset": true
@@ -55,7 +55,7 @@
             "name": "feature_columns",
             "type": "COLUMNS",
             "columnRole": "input_dataset",
-            "description": "Columns containing numeric or vector data (e.g. embeddings) in the same order as the index",
+            "description": "Columns containing numeric or vector data e.g., embeddings in the same order as the index",
             "label": "Feature column(s)",
             "allowedColumnTypes": [
                 "tinyint",
